@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32413.511
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{159641D6-6404-4A2A-AE62-294DE0FE8301}") = "DailyProcess", "DailyProcess.dtproj", "{4B484458-3CEA-4D5A-AD51-4FA426C009F5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Development|Default = Development|Default
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4B484458-3CEA-4D5A-AD51-4FA426C009F5}.Development|Default.ActiveCfg = Development
+		{4B484458-3CEA-4D5A-AD51-4FA426C009F5}.Development|Default.Build.0 = Development
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {16B7AA03-7202-443A-AF1F-5FE6288892D2}
+	EndGlobalSection
+EndGlobal

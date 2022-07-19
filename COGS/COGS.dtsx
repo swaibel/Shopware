@@ -1,0 +1,1113 @@
+﻿<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="6/30/2021 11:10:18 AM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="BMASTPC40"
+  DTS:CreatorName="BRAKE_NT\Steve.Waibel"
+  DTS:DTSID="{5D67C193-BA58-4F75-99B3-5C6D1D1A6BAE}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="15.0.2000.157"
+  DTS:LocaleID="1033"
+  DTS:ObjectName="Package"
+  DTS:PackageType="5"
+  DTS:VersionBuild="6"
+  DTS:VersionGUID="{3EA98AE4-1653-469D-8BD5-8C43F55037DA}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[brakesql.Middleware]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{EAC0F1D3-B7E9-4754-87D0-950F7B6ED901}"
+      DTS:ObjectName="brakesql.Middleware">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectionString="Data Source=brakesql;Initial Catalog=Middleware;Provider=MSOLEDBSQL.1;Integrated Security=SSPI;Auto Translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[brakesql.Shopware]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{346D796B-0B0D-464E-9FA0-47B40CF42D02}"
+      DTS:ObjectName="brakesql.Shopware">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectionString="Data Source=brakesql;Initial Catalog=Shopware;Provider=MSOLEDBSQL.1;Integrated Security=SSPI;Auto Translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:Variables />
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\Data Flow Task"
+      DTS:CreationName="Microsoft.Pipeline"
+      DTS:Description="Data Flow Task"
+      DTS:DTSID="{37EDF994-F285-4FFC-9D97-6E43C473EDD9}"
+      DTS:ExecutableType="Microsoft.Pipeline"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Data Flow Task"
+      DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <pipeline
+          version="1">
+          <components>
+            <component
+              refId="Package\Data Flow Task\Data Conversion"
+              componentClassID="Microsoft.DataConvert"
+              contactInfo="Data Conversion;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;0"
+              description="Data Conversion"
+              name="Data Conversion"
+              usesDispositions="true">
+              <inputs>
+                <input
+                  refId="Package\Data Flow Task\Data Conversion.Inputs[Data Conversion Input]"
+                  name="Data Conversion Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Data Flow Task\Data Conversion.Inputs[Data Conversion Input].Columns[Location]"
+                      cachedDataType="wstr"
+                      cachedLength="3"
+                      cachedName="Location"
+                      lineageId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].Columns[Location]" />
+                    <inputColumn
+                      refId="Package\Data Flow Task\Data Conversion.Inputs[Data Conversion Input].Columns[description]"
+                      cachedDataType="wstr"
+                      cachedLength="25"
+                      cachedName="description"
+                      lineageId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].Columns[description]" />
+                    <inputColumn
+                      refId="Package\Data Flow Task\Data Conversion.Inputs[Data Conversion Input].Columns[category]"
+                      cachedDataType="wstr"
+                      cachedLength="44"
+                      cachedName="category"
+                      lineageId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].Columns[category]" />
+                    <inputColumn
+                      refId="Package\Data Flow Task\Data Conversion.Inputs[Data Conversion Input].Columns[part_no]"
+                      cachedDataType="wstr"
+                      cachedLength="25"
+                      cachedName="part_no"
+                      lineageId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].Columns[part_no]" />
+                    <inputColumn
+                      refId="Package\Data Flow Task\Data Conversion.Inputs[Data Conversion Input].Columns[store_id]"
+                      cachedDataType="wstr"
+                      cachedLength="48"
+                      cachedName="store_id"
+                      lineageId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].Columns[store_id]" />
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Data Flow Task\Data Conversion.Outputs[Data Conversion Output]"
+                  exclusionGroup="1"
+                  name="Data Conversion Output"
+                  synchronousInputId="Package\Data Flow Task\Data Conversion.Inputs[Data Conversion Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Data Flow Task\Data Conversion.Outputs[Data Conversion Output].Columns[PartGroup]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      length="3"
+                      lineageId="Package\Data Flow Task\Data Conversion.Outputs[Data Conversion Output].Columns[PartGroup]"
+                      name="PartGroup"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Specifies the input column used as the source of data for the conversion."
+                          name="SourceInputColumnLineageID">#{Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].Columns[Location]}</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                          name="FastParse">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Data Flow Task\Data Conversion.Outputs[Data Conversion Output].Columns[descript]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      length="140"
+                      lineageId="Package\Data Flow Task\Data Conversion.Outputs[Data Conversion Output].Columns[descript]"
+                      name="descript"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Specifies the input column used as the source of data for the conversion."
+                          name="SourceInputColumnLineageID">#{Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].Columns[description]}</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                          name="FastParse">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Data Flow Task\Data Conversion.Outputs[Data Conversion Output].Columns[JobCode]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      length="10"
+                      lineageId="Package\Data Flow Task\Data Conversion.Outputs[Data Conversion Output].Columns[JobCode]"
+                      name="JobCode"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Specifies the input column used as the source of data for the conversion."
+                          name="SourceInputColumnLineageID">#{Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].Columns[category]}</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                          name="FastParse">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Data Flow Task\Data Conversion.Outputs[Data Conversion Output].Columns[Part#]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      length="20"
+                      lineageId="Package\Data Flow Task\Data Conversion.Outputs[Data Conversion Output].Columns[Part#]"
+                      name="Part#"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Specifies the input column used as the source of data for the conversion."
+                          name="SourceInputColumnLineageID">#{Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].Columns[part_no]}</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                          name="FastParse">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Data Flow Task\Data Conversion.Outputs[Data Conversion Output].Columns[Store#]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      length="48"
+                      lineageId="Package\Data Flow Task\Data Conversion.Outputs[Data Conversion Output].Columns[Store#]"
+                      name="Store#"
+                      truncationRowDisposition="IgnoreFailure">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Specifies the input column used as the source of data for the conversion."
+                          name="SourceInputColumnLineageID">#{Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].Columns[store_id]}</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                          name="FastParse">false</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Data Flow Task\Data Conversion.Outputs[Data Conversion Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Data Conversion Error Output"
+                  synchronousInputId="Package\Data Flow Task\Data Conversion.Inputs[Data Conversion Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Data Flow Task\Data Conversion.Outputs[Data Conversion Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Data Flow Task\Data Conversion.Outputs[Data Conversion Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\Data Conversion.Outputs[Data Conversion Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Data Flow Task\Data Conversion.Outputs[Data Conversion Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Data Flow Task\Middleware - tblTempCOGS"
+              componentClassID="Microsoft.OLEDBDestination"
+              contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
+              description="OLE DB Destination"
+              name="Middleware - tblTempCOGS"
+              usesDispositions="true"
+              version="4">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">[dbo].[tblTempCOGS]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">3</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepIdentity">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the columns containing null will have null inserted in the destination. If false, columns containing null will have their default values inserted at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepNulls">false</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies options to be used with fast load.  Applies only if fast load is turned on."
+                  name="FastLoadOptions">TABLOCK,CHECK_CONSTRAINTS</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion.  Applies only if fast load is turned on."
+                  name="FastLoadMaxInsertCommitSize">2147483647</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Data Flow Task\Middleware - tblTempCOGS.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[brakesql.Middleware]"
+                  connectionManagerRefId="Package.ConnectionManagers[brakesql.Middleware]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Data Flow Task\Middleware - tblTempCOGS.Inputs[OLE DB Destination Input]"
+                  errorOrTruncationOperation="Insert"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="OLE DB Destination Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Data Flow Task\Middleware - tblTempCOGS.Inputs[OLE DB Destination Input].Columns[RONumber]"
+                      cachedDataType="i4"
+                      cachedName="RONumber"
+                      externalMetadataColumnId="Package\Data Flow Task\Middleware - tblTempCOGS.Inputs[OLE DB Destination Input].ExternalColumns[control_no]"
+                      lineageId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].Columns[RONumber]" />
+                    <inputColumn
+                      refId="Package\Data Flow Task\Middleware - tblTempCOGS.Inputs[OLE DB Destination Input].Columns[quantity]"
+                      cachedDataType="r8"
+                      cachedName="quantity"
+                      externalMetadataColumnId="Package\Data Flow Task\Middleware - tblTempCOGS.Inputs[OLE DB Destination Input].ExternalColumns[qty]"
+                      lineageId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].Columns[quantity]" />
+                    <inputColumn
+                      refId="Package\Data Flow Task\Middleware - tblTempCOGS.Inputs[OLE DB Destination Input].Columns[ClosedDate]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="10"
+                      cachedName="ClosedDate"
+                      externalMetadataColumnId="Package\Data Flow Task\Middleware - tblTempCOGS.Inputs[OLE DB Destination Input].ExternalColumns[ConvDate]"
+                      lineageId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].Columns[ClosedDate]" />
+                    <inputColumn
+                      refId="Package\Data Flow Task\Middleware - tblTempCOGS.Inputs[OLE DB Destination Input].Columns[PartCostEA_Dollars]"
+                      cachedDataType="numeric"
+                      cachedName="PartCostEA_Dollars"
+                      cachedPrecision="8"
+                      cachedScale="2"
+                      externalMetadataColumnId="Package\Data Flow Task\Middleware - tblTempCOGS.Inputs[OLE DB Destination Input].ExternalColumns[PartCost]"
+                      lineageId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].Columns[PartCostEA_Dollars]" />
+                    <inputColumn
+                      refId="Package\Data Flow Task\Middleware - tblTempCOGS.Inputs[OLE DB Destination Input].Columns[PartGroup]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="3"
+                      cachedName="PartGroup"
+                      externalMetadataColumnId="Package\Data Flow Task\Middleware - tblTempCOGS.Inputs[OLE DB Destination Input].ExternalColumns[part_grp]"
+                      lineageId="Package\Data Flow Task\Data Conversion.Outputs[Data Conversion Output].Columns[PartGroup]" />
+                    <inputColumn
+                      refId="Package\Data Flow Task\Middleware - tblTempCOGS.Inputs[OLE DB Destination Input].Columns[descript]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="140"
+                      cachedName="descript"
+                      externalMetadataColumnId="Package\Data Flow Task\Middleware - tblTempCOGS.Inputs[OLE DB Destination Input].ExternalColumns[descript]"
+                      lineageId="Package\Data Flow Task\Data Conversion.Outputs[Data Conversion Output].Columns[descript]" />
+                    <inputColumn
+                      refId="Package\Data Flow Task\Middleware - tblTempCOGS.Inputs[OLE DB Destination Input].Columns[JobCode]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="10"
+                      cachedName="JobCode"
+                      externalMetadataColumnId="Package\Data Flow Task\Middleware - tblTempCOGS.Inputs[OLE DB Destination Input].ExternalColumns[job_code]"
+                      lineageId="Package\Data Flow Task\Data Conversion.Outputs[Data Conversion Output].Columns[JobCode]" />
+                    <inputColumn
+                      refId="Package\Data Flow Task\Middleware - tblTempCOGS.Inputs[OLE DB Destination Input].Columns[Part#]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="20"
+                      cachedName="Part#"
+                      externalMetadataColumnId="Package\Data Flow Task\Middleware - tblTempCOGS.Inputs[OLE DB Destination Input].ExternalColumns[part_no]"
+                      lineageId="Package\Data Flow Task\Data Conversion.Outputs[Data Conversion Output].Columns[Part#]" />
+                    <inputColumn
+                      refId="Package\Data Flow Task\Middleware - tblTempCOGS.Inputs[OLE DB Destination Input].Columns[YesPosted]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="1"
+                      cachedName="YesPosted"
+                      externalMetadataColumnId="Package\Data Flow Task\Middleware - tblTempCOGS.Inputs[OLE DB Destination Input].ExternalColumns[YESPosted]"
+                      lineageId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].Columns[YesPosted]" />
+                    <inputColumn
+                      refId="Package\Data Flow Task\Middleware - tblTempCOGS.Inputs[OLE DB Destination Input].Columns[Store#]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="48"
+                      cachedName="Store#"
+                      externalMetadataColumnId="Package\Data Flow Task\Middleware - tblTempCOGS.Inputs[OLE DB Destination Input].ExternalColumns[store_id]"
+                      lineageId="Package\Data Flow Task\Data Conversion.Outputs[Data Conversion Output].Columns[Store#]" />
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\Middleware - tblTempCOGS.Inputs[OLE DB Destination Input].ExternalColumns[store_id]"
+                      codePage="1252"
+                      dataType="str"
+                      length="3"
+                      name="store_id" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\Middleware - tblTempCOGS.Inputs[OLE DB Destination Input].ExternalColumns[PartCost]"
+                      dataType="numeric"
+                      name="PartCost"
+                      precision="11"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\Middleware - tblTempCOGS.Inputs[OLE DB Destination Input].ExternalColumns[ConvDate]"
+                      dataType="dbTimeStamp"
+                      name="ConvDate" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\Middleware - tblTempCOGS.Inputs[OLE DB Destination Input].ExternalColumns[part_mfg]"
+                      codePage="1252"
+                      dataType="str"
+                      length="3"
+                      name="part_mfg" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\Middleware - tblTempCOGS.Inputs[OLE DB Destination Input].ExternalColumns[part_grp]"
+                      codePage="1252"
+                      dataType="str"
+                      length="3"
+                      name="part_grp" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\Middleware - tblTempCOGS.Inputs[OLE DB Destination Input].ExternalColumns[descript]"
+                      codePage="1252"
+                      dataType="text"
+                      name="descript" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\Middleware - tblTempCOGS.Inputs[OLE DB Destination Input].ExternalColumns[priority]"
+                      codePage="1252"
+                      dataType="str"
+                      length="1"
+                      name="priority" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\Middleware - tblTempCOGS.Inputs[OLE DB Destination Input].ExternalColumns[control_no]"
+                      dataType="i4"
+                      name="control_no" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\Middleware - tblTempCOGS.Inputs[OLE DB Destination Input].ExternalColumns[job_code]"
+                      codePage="1252"
+                      dataType="str"
+                      length="10"
+                      name="job_code" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\Middleware - tblTempCOGS.Inputs[OLE DB Destination Input].ExternalColumns[ave_cost]"
+                      dataType="numeric"
+                      name="ave_cost"
+                      precision="11"
+                      scale="4" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\Middleware - tblTempCOGS.Inputs[OLE DB Destination Input].ExternalColumns[part_no]"
+                      codePage="1252"
+                      dataType="str"
+                      length="25"
+                      name="part_no" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\Middleware - tblTempCOGS.Inputs[OLE DB Destination Input].ExternalColumns[vend_part]"
+                      codePage="1252"
+                      dataType="str"
+                      length="20"
+                      name="vend_part" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\Middleware - tblTempCOGS.Inputs[OLE DB Destination Input].ExternalColumns[serv_id]"
+                      dataType="i8"
+                      name="serv_id" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\Middleware - tblTempCOGS.Inputs[OLE DB Destination Input].ExternalColumns[qty]"
+                      dataType="numeric"
+                      name="qty"
+                      precision="11"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\Middleware - tblTempCOGS.Inputs[OLE DB Destination Input].ExternalColumns[YESPosted]"
+                      codePage="1252"
+                      dataType="str"
+                      length="5"
+                      name="YESPosted" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\Middleware - tblTempCOGS.Inputs[OLE DB Destination Input].ExternalColumns[YESDrawerDate]"
+                      dataType="dbTimeStamp"
+                      name="YESDrawerDate" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\Middleware - tblTempCOGS.Inputs[OLE DB Destination Input].ExternalColumns[trans_date]"
+                      dataType="numeric"
+                      name="trans_date"
+                      precision="6" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\Middleware - tblTempCOGS.Inputs[OLE DB Destination Input].ExternalColumns[RecordType]"
+                      codePage="1252"
+                      dataType="str"
+                      length="4"
+                      name="RecordType" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Data Flow Task\Middleware - tblTempCOGS.Outputs[OLE DB Destination Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="OLE DB Destination Error Output"
+                  synchronousInputId="Package\Data Flow Task\Middleware - tblTempCOGS.Inputs[OLE DB Destination Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Data Flow Task\Middleware - tblTempCOGS.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Data Flow Task\Middleware - tblTempCOGS.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\Middleware - tblTempCOGS.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Data Flow Task\Middleware - tblTempCOGS.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Data Flow Task\Shopware"
+              componentClassID="Microsoft.OLEDBSource"
+              contactInfo="OLE DB Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;7"
+              description="OLE DB Source"
+              name="Shopware"
+              usesDispositions="true"
+              version="7">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">[dbo].[vw_COG]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                <property
+                  dataType="System.String"
+                  description="The variable that contains the SQL command to be executed."
+                  name="SqlCommandVariable"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">0</property>
+                <property
+                  dataType="System.String"
+                  description="The mappings between the parameters in the SQL command and variables."
+                  name="ParameterMapping"></property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Data Flow Task\Shopware.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[brakesql.Shopware]"
+                  connectionManagerRefId="Package.ConnectionManagers[brakesql.Shopware]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <outputs>
+                <output
+                  refId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output]"
+                  name="OLE DB Source Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].Columns[RONumber]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].ExternalColumns[RONumber]"
+                      lineageId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].Columns[RONumber]"
+                      name="RONumber"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].Columns[store_id]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].ExternalColumns[store_id]"
+                      length="48"
+                      lineageId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].Columns[store_id]"
+                      name="store_id"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].Columns[part_no]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].ExternalColumns[part_no]"
+                      length="25"
+                      lineageId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].Columns[part_no]"
+                      name="part_no"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].Columns[ClosedDate]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].ExternalColumns[ClosedDate]"
+                      length="10"
+                      lineageId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].Columns[ClosedDate]"
+                      name="ClosedDate"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].Columns[description]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].ExternalColumns[description]"
+                      length="25"
+                      lineageId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].Columns[description]"
+                      name="description"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].Columns[quantity]"
+                      dataType="r8"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].ExternalColumns[quantity]"
+                      lineageId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].Columns[quantity]"
+                      name="quantity"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].Columns[PartsSellEA_Dollars]"
+                      dataType="numeric"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].ExternalColumns[PartsSellEA_Dollars]"
+                      lineageId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].Columns[PartsSellEA_Dollars]"
+                      name="PartsSellEA_Dollars"
+                      precision="8"
+                      scale="2"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].Columns[PartsSellTotal_Dollars]"
+                      dataType="numeric"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].ExternalColumns[PartsSellTotal_Dollars]"
+                      lineageId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].Columns[PartsSellTotal_Dollars]"
+                      name="PartsSellTotal_Dollars"
+                      precision="8"
+                      scale="2"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].Columns[PartCostEA_Dollars]"
+                      dataType="numeric"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].ExternalColumns[PartCostEA_Dollars]"
+                      lineageId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].Columns[PartCostEA_Dollars]"
+                      name="PartCostEA_Dollars"
+                      precision="8"
+                      scale="2"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].Columns[PartCostTotal_Dollars]"
+                      dataType="numeric"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].ExternalColumns[PartCostTotal_Dollars]"
+                      lineageId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].Columns[PartCostTotal_Dollars]"
+                      name="PartCostTotal_Dollars"
+                      precision="8"
+                      scale="2"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].Columns[category]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].ExternalColumns[category]"
+                      length="44"
+                      lineageId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].Columns[category]"
+                      name="category"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].Columns[Location]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].ExternalColumns[Location]"
+                      length="3"
+                      lineageId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].Columns[Location]"
+                      name="Location"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].Columns[YesPosted]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].ExternalColumns[YesPosted]"
+                      length="1"
+                      lineageId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].Columns[YesPosted]"
+                      name="YesPosted"
+                      truncationRowDisposition="FailComponent" />
+                  </outputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].ExternalColumns[RONumber]"
+                      dataType="i4"
+                      name="RONumber" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].ExternalColumns[store_id]"
+                      dataType="wstr"
+                      length="48"
+                      name="store_id" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].ExternalColumns[part_no]"
+                      dataType="wstr"
+                      length="25"
+                      name="part_no" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].ExternalColumns[ClosedDate]"
+                      codePage="1252"
+                      dataType="str"
+                      length="10"
+                      name="ClosedDate" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].ExternalColumns[description]"
+                      dataType="wstr"
+                      length="25"
+                      name="description" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].ExternalColumns[quantity]"
+                      dataType="r8"
+                      name="quantity" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].ExternalColumns[PartsSellEA_Dollars]"
+                      dataType="numeric"
+                      name="PartsSellEA_Dollars"
+                      precision="8"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].ExternalColumns[PartsSellTotal_Dollars]"
+                      dataType="numeric"
+                      name="PartsSellTotal_Dollars"
+                      precision="8"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].ExternalColumns[PartCostEA_Dollars]"
+                      dataType="numeric"
+                      name="PartCostEA_Dollars"
+                      precision="8"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].ExternalColumns[PartCostTotal_Dollars]"
+                      dataType="numeric"
+                      name="PartCostTotal_Dollars"
+                      precision="8"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].ExternalColumns[category]"
+                      dataType="wstr"
+                      length="44"
+                      name="category" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].ExternalColumns[Location]"
+                      dataType="wstr"
+                      length="3"
+                      name="Location" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output].ExternalColumns[YesPosted]"
+                      codePage="1252"
+                      dataType="str"
+                      length="1"
+                      name="YesPosted" />
+                  </externalMetadataColumns>
+                </output>
+                <output
+                  refId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Error Output]"
+                  isErrorOut="true"
+                  name="OLE DB Source Error Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Error Output].Columns[RONumber]"
+                      dataType="i4"
+                      lineageId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Error Output].Columns[RONumber]"
+                      name="RONumber" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Error Output].Columns[store_id]"
+                      dataType="wstr"
+                      length="48"
+                      lineageId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Error Output].Columns[store_id]"
+                      name="store_id" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Error Output].Columns[part_no]"
+                      dataType="wstr"
+                      length="25"
+                      lineageId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Error Output].Columns[part_no]"
+                      name="part_no" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Error Output].Columns[ClosedDate]"
+                      codePage="1252"
+                      dataType="str"
+                      length="10"
+                      lineageId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Error Output].Columns[ClosedDate]"
+                      name="ClosedDate" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Error Output].Columns[description]"
+                      dataType="wstr"
+                      length="25"
+                      lineageId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Error Output].Columns[description]"
+                      name="description" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Error Output].Columns[quantity]"
+                      dataType="r8"
+                      lineageId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Error Output].Columns[quantity]"
+                      name="quantity" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Error Output].Columns[PartsSellEA_Dollars]"
+                      dataType="numeric"
+                      lineageId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Error Output].Columns[PartsSellEA_Dollars]"
+                      name="PartsSellEA_Dollars"
+                      precision="8"
+                      scale="2" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Error Output].Columns[PartsSellTotal_Dollars]"
+                      dataType="numeric"
+                      lineageId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Error Output].Columns[PartsSellTotal_Dollars]"
+                      name="PartsSellTotal_Dollars"
+                      precision="8"
+                      scale="2" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Error Output].Columns[PartCostEA_Dollars]"
+                      dataType="numeric"
+                      lineageId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Error Output].Columns[PartCostEA_Dollars]"
+                      name="PartCostEA_Dollars"
+                      precision="8"
+                      scale="2" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Error Output].Columns[PartCostTotal_Dollars]"
+                      dataType="numeric"
+                      lineageId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Error Output].Columns[PartCostTotal_Dollars]"
+                      name="PartCostTotal_Dollars"
+                      precision="8"
+                      scale="2" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Error Output].Columns[Location]"
+                      dataType="wstr"
+                      length="3"
+                      lineageId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Error Output].Columns[Location]"
+                      name="Location" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Error Output].Columns[category]"
+                      dataType="wstr"
+                      length="44"
+                      lineageId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Error Output].Columns[category]"
+                      name="category" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Error Output].Columns[YesPosted]"
+                      codePage="1252"
+                      dataType="str"
+                      length="1"
+                      lineageId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Error Output].Columns[YesPosted]"
+                      name="YesPosted" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path
+              refId="Package\Data Flow Task.Paths[Data Conversion Output]"
+              endId="Package\Data Flow Task\Middleware - tblTempCOGS.Inputs[OLE DB Destination Input]"
+              name="Data Conversion Output"
+              startId="Package\Data Flow Task\Data Conversion.Outputs[Data Conversion Output]" />
+            <path
+              refId="Package\Data Flow Task.Paths[OLE DB Source Output]"
+              endId="Package\Data Flow Task\Data Conversion.Inputs[Data Conversion Input]"
+              name="OLE DB Source Output"
+              startId="Package\Data Flow Task\Shopware.Outputs[OLE DB Source Output]" />
+          </paths>
+        </pipeline>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Set Yes DrawerDate"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{855B68A4-0402-4C0C-8E05-CDEDAEBF99C8}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Set Yes DrawerDate"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{EAC0F1D3-B7E9-4754-87D0-950F7B6ED901}"
+          SQLTask:BypassPrepare="False"
+          SQLTask:SqlStatementSource="Update [tblTempCOGS]&#xA;Set YESDrawerDate = ConvDate&#xA;WHERE YESDrawerDate is null" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:PrecedenceConstraints>
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint]"
+      DTS:CreationName=""
+      DTS:DTSID="{ABF0F168-3C75-4EFA-8F10-3CDD813991F5}"
+      DTS:From="Package\Data Flow Task"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint"
+      DTS:To="Package\Set Yes DrawerDate" />
+  </DTS:PrecedenceConstraints>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="155,42"
+          Id="Package\Data Flow Task"
+          TopLeft="96,64" />
+        <NodeLayout
+          Size="179,42"
+          Id="Package\Set Yes DrawerDate"
+          TopLeft="210,176" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint]"
+          TopLeft="173.5,106">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="126,70"
+              Start="0,0"
+              End="126,62.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,31" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,31"
+                    Point2="0,35"
+                    Point3="4,35" />
+                  <mssgle:LineSegment
+                    End="122,35" />
+                  <mssgle:CubicBezierSegment
+                    Point1="122,35"
+                    Point2="126,35"
+                    Point3="126,39" />
+                  <mssgle:LineSegment
+                    End="126,62.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+  <TaskHost
+    design-time-name="Package\Data Flow Task">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="8" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="129,42"
+          Id="Package\Data Flow Task\Shopware"
+          TopLeft="172,60" />
+        <NodeLayout
+          Size="217,42"
+          Id="Package\Data Flow Task\Middleware - tblTempCOGS"
+          TopLeft="349,295" />
+        <NodeLayout
+          Size="161,42"
+          Id="Package\Data Flow Task\Data Conversion"
+          TopLeft="196,196" />
+        <EdgeLayout
+          Id="Package\Data Flow Task.Paths[OLE DB Source Output]"
+          TopLeft="236.5,102">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="40,94"
+              Start="0,0"
+              End="40,86.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,43" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,43"
+                    Point2="0,47"
+                    Point3="4,47" />
+                  <mssgle:LineSegment
+                    End="36,47" />
+                  <mssgle:CubicBezierSegment
+                    Point1="36,47"
+                    Point2="40,47"
+                    Point3="40,51" />
+                  <mssgle:LineSegment
+                    End="40,86.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Data Flow Task.Paths[Data Conversion Output]"
+          TopLeft="276.5,238">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="181,57"
+              Start="0,0"
+              End="181,49.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,24.5" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,24.5"
+                    Point2="0,28.5"
+                    Point3="4,28.5" />
+                  <mssgle:LineSegment
+                    End="177,28.5" />
+                  <mssgle:CubicBezierSegment
+                    Point1="177,28.5"
+                    Point2="181,28.5"
+                    Point3="181,32.5" />
+                  <mssgle:LineSegment
+                    End="181,49.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Data Flow Task\Shopware">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">View</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\Data Flow Task\Middleware - tblTempCOGS">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>

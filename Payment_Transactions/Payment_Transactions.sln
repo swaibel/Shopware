@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2027
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{159641D6-6404-4A2A-AE62-294DE0FE8301}") = "Payment_Transactions", "Payment_Transactions\Payment_Transactions.dtproj", "{DA95A944-DC99-4B08-94A4-621075B05CBD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Development|Default = Development|Default
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DA95A944-DC99-4B08-94A4-621075B05CBD}.Development|Default.ActiveCfg = Development
+		{DA95A944-DC99-4B08-94A4-621075B05CBD}.Development|Default.Build.0 = Development
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E80C8882-8868-4F97-9653-ADF0C96EBF98}
+	EndGlobalSection
+EndGlobal

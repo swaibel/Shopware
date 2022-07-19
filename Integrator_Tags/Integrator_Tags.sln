@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2027
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{159641D6-6404-4A2A-AE62-294DE0FE8301}") = "Integrator_Tags", "Integrator_Tags\Integrator_Tags.dtproj", "{D9A558AC-EED3-4ECF-B02C-9199F82E91F1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Development|Default = Development|Default
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D9A558AC-EED3-4ECF-B02C-9199F82E91F1}.Development|Default.ActiveCfg = Development
+		{D9A558AC-EED3-4ECF-B02C-9199F82E91F1}.Development|Default.Build.0 = Development
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AA2628CE-7310-4154-A067-E8230DB6427C}
+	EndGlobalSection
+EndGlobal

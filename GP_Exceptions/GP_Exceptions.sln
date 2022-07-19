@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2027
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{159641D6-6404-4A2A-AE62-294DE0FE8301}") = "GP_Exceptions", "GP_Exceptions\GP_Exceptions.dtproj", "{5BF629D7-E395-4CAB-929B-EF8CBC6024B0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Development|Default = Development|Default
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5BF629D7-E395-4CAB-929B-EF8CBC6024B0}.Development|Default.ActiveCfg = Development
+		{5BF629D7-E395-4CAB-929B-EF8CBC6024B0}.Development|Default.Build.0 = Development
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {55F8D7A1-5D80-4E10-A0DE-3105596847EC}
+	EndGlobalSection
+EndGlobal

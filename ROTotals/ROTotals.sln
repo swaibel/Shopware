@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2027
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{159641D6-6404-4A2A-AE62-294DE0FE8301}") = "ROTotals", "ROTotals\ROTotals.dtproj", "{8C065D76-9127-474F-9F48-A8B653414A05}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Development|Default = Development|Default
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8C065D76-9127-474F-9F48-A8B653414A05}.Development|Default.ActiveCfg = Development
+		{8C065D76-9127-474F-9F48-A8B653414A05}.Development|Default.Build.0 = Development
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EA59D58F-A62D-4BB5-A8E5-1B4BAD2565CA}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,840 @@
+<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="7/22/2021 11:26:39 AM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="BMASTPC40"
+  DTS:CreatorName="BRAKE_NT\Steve.Waibel"
+  DTS:DTSID="{33D837D9-D5F8-4602-8329-9BF5A9D9459A}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="15.0.2000.157"
+  DTS:LocaleID="1033"
+  DTS:ObjectName="Package"
+  DTS:PackageType="5"
+  DTS:VersionBuild="2"
+  DTS:VersionGUID="{126D4E87-6575-4565-A0FD-58FE7C521C05}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[brakesql.Middleware]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{C69EF486-9631-4D26-A6D0-7F361DD7F83D}"
+      DTS:ObjectName="brakesql.Middleware">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectionString="Data Source=brakesql;Initial Catalog=Middleware;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[brakesql.Shopware]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{7750C642-293C-449C-BD8D-9FA8C20285B1}"
+      DTS:ObjectName="brakesql.Shopware">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectionString="Data Source=brakesql;Initial Catalog=Shopware;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:Variables />
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\Insert Shopware to tblLabor"
+      DTS:CreationName="Microsoft.Pipeline"
+      DTS:Description="Data Flow Task"
+      DTS:DTSID="{01FB1DCB-AC91-4E12-8A43-C40734EE2261}"
+      DTS:ExecutableType="Microsoft.Pipeline"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Insert Shopware to tblLabor"
+      DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <pipeline
+          version="1">
+          <components>
+            <component
+              refId="Package\Insert Shopware to tblLabor\Data Conversion for shop_id"
+              componentClassID="Microsoft.DataConvert"
+              contactInfo="Data Conversion;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;0"
+              description="Data Conversion"
+              name="Data Conversion for shop_id"
+              usesDispositions="true">
+              <inputs>
+                <input
+                  refId="Package\Insert Shopware to tblLabor\Data Conversion for shop_id.Inputs[Data Conversion Input]"
+                  name="Data Conversion Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Insert Shopware to tblLabor\Data Conversion for shop_id.Inputs[Data Conversion Input].Columns[shop_id]"
+                      cachedDataType="wstr"
+                      cachedLength="48"
+                      cachedName="shop_id"
+                      lineageId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Output].Columns[shop_id]" />
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Insert Shopware to tblLabor\Data Conversion for shop_id.Outputs[Data Conversion Output]"
+                  exclusionGroup="1"
+                  name="Data Conversion Output"
+                  synchronousInputId="Package\Insert Shopware to tblLabor\Data Conversion for shop_id.Inputs[Data Conversion Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Insert Shopware to tblLabor\Data Conversion for shop_id.Outputs[Data Conversion Output].Columns[store_id]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      length="3"
+                      lineageId="Package\Insert Shopware to tblLabor\Data Conversion for shop_id.Outputs[Data Conversion Output].Columns[store_id]"
+                      name="store_id"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Specifies the input column used as the source of data for the conversion."
+                          name="SourceInputColumnLineageID">#{Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Output].Columns[shop_id]}</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                          name="FastParse">false</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Insert Shopware to tblLabor\Data Conversion for shop_id.Outputs[Data Conversion Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Data Conversion Error Output"
+                  synchronousInputId="Package\Insert Shopware to tblLabor\Data Conversion for shop_id.Inputs[Data Conversion Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Insert Shopware to tblLabor\Data Conversion for shop_id.Outputs[Data Conversion Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Insert Shopware to tblLabor\Data Conversion for shop_id.Outputs[Data Conversion Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Insert Shopware to tblLabor\Data Conversion for shop_id.Outputs[Data Conversion Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Insert Shopware to tblLabor\Data Conversion for shop_id.Outputs[Data Conversion Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Insert Shopware to tblLabor\OLE DB Destination Middleware"
+              componentClassID="Microsoft.OLEDBDestination"
+              contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
+              description="OLE DB Destination"
+              name="OLE DB Destination Middleware"
+              usesDispositions="true"
+              version="4">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">[dbo].[tblLabor]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">3</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepIdentity">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the columns containing null will have null inserted in the destination. If false, columns containing null will have their default values inserted at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepNulls">false</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies options to be used with fast load.  Applies only if fast load is turned on."
+                  name="FastLoadOptions">TABLOCK,CHECK_CONSTRAINTS</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion.  Applies only if fast load is turned on."
+                  name="FastLoadMaxInsertCommitSize">2147483647</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Insert Shopware to tblLabor\OLE DB Destination Middleware.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[brakesql.Middleware]"
+                  connectionManagerRefId="Package.ConnectionManagers[brakesql.Middleware]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Insert Shopware to tblLabor\OLE DB Destination Middleware.Inputs[OLE DB Destination Input]"
+                  errorOrTruncationOperation="Insert"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="OLE DB Destination Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Insert Shopware to tblLabor\OLE DB Destination Middleware.Inputs[OLE DB Destination Input].Columns[ConvDate]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="10"
+                      cachedName="ConvDate"
+                      externalMetadataColumnId="Package\Insert Shopware to tblLabor\OLE DB Destination Middleware.Inputs[OLE DB Destination Input].ExternalColumns[ConvDate]"
+                      lineageId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Output].Columns[ConvDate]" />
+                    <inputColumn
+                      refId="Package\Insert Shopware to tblLabor\OLE DB Destination Middleware.Inputs[OLE DB Destination Input].Columns[ConvDrawerDate]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="10"
+                      cachedName="ConvDrawerDate"
+                      externalMetadataColumnId="Package\Insert Shopware to tblLabor\OLE DB Destination Middleware.Inputs[OLE DB Destination Input].ExternalColumns[ConvDrawerDate]"
+                      lineageId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Output].Columns[ConvDrawerDate]" />
+                    <inputColumn
+                      refId="Package\Insert Shopware to tblLabor\OLE DB Destination Middleware.Inputs[OLE DB Destination Input].Columns[qty]"
+                      cachedDataType="r8"
+                      cachedName="qty"
+                      externalMetadataColumnId="Package\Insert Shopware to tblLabor\OLE DB Destination Middleware.Inputs[OLE DB Destination Input].ExternalColumns[qty]"
+                      lineageId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Output].Columns[qty]" />
+                    <inputColumn
+                      refId="Package\Insert Shopware to tblLabor\OLE DB Destination Middleware.Inputs[OLE DB Destination Input].Columns[labor]"
+                      cachedDataType="r8"
+                      cachedName="labor"
+                      externalMetadataColumnId="Package\Insert Shopware to tblLabor\OLE DB Destination Middleware.Inputs[OLE DB Destination Input].ExternalColumns[Labor]"
+                      lineageId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Output].Columns[labor]" />
+                    <inputColumn
+                      refId="Package\Insert Shopware to tblLabor\OLE DB Destination Middleware.Inputs[OLE DB Destination Input].Columns[sell]"
+                      cachedDataType="numeric"
+                      cachedName="sell"
+                      cachedPrecision="18"
+                      cachedScale="6"
+                      externalMetadataColumnId="Package\Insert Shopware to tblLabor\OLE DB Destination Middleware.Inputs[OLE DB Destination Input].ExternalColumns[sell]"
+                      lineageId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Output].Columns[sell]" />
+                    <inputColumn
+                      refId="Package\Insert Shopware to tblLabor\OLE DB Destination Middleware.Inputs[OLE DB Destination Input].Columns[TechCode]"
+                      cachedDataType="i4"
+                      cachedName="TechCode"
+                      externalMetadataColumnId="Package\Insert Shopware to tblLabor\OLE DB Destination Middleware.Inputs[OLE DB Destination Input].ExternalColumns[tech_code]"
+                      lineageId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Output].Columns[TechCode]" />
+                    <inputColumn
+                      refId="Package\Insert Shopware to tblLabor\OLE DB Destination Middleware.Inputs[OLE DB Destination Input].Columns[RONumber]"
+                      cachedDataType="i4"
+                      cachedName="RONumber"
+                      externalMetadataColumnId="Package\Insert Shopware to tblLabor\OLE DB Destination Middleware.Inputs[OLE DB Destination Input].ExternalColumns[control_no]"
+                      lineageId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Output].Columns[RONumber]" />
+                    <inputColumn
+                      refId="Package\Insert Shopware to tblLabor\OLE DB Destination Middleware.Inputs[OLE DB Destination Input].Columns[store_id]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="3"
+                      cachedName="store_id"
+                      externalMetadataColumnId="Package\Insert Shopware to tblLabor\OLE DB Destination Middleware.Inputs[OLE DB Destination Input].ExternalColumns[store_id]"
+                      lineageId="Package\Insert Shopware to tblLabor\Data Conversion for shop_id.Outputs[Data Conversion Output].Columns[store_id]" />
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Insert Shopware to tblLabor\OLE DB Destination Middleware.Inputs[OLE DB Destination Input].ExternalColumns[PK]"
+                      dataType="i4"
+                      name="PK" />
+                    <externalMetadataColumn
+                      refId="Package\Insert Shopware to tblLabor\OLE DB Destination Middleware.Inputs[OLE DB Destination Input].ExternalColumns[part_grp]"
+                      codePage="1252"
+                      dataType="str"
+                      length="3"
+                      name="part_grp" />
+                    <externalMetadataColumn
+                      refId="Package\Insert Shopware to tblLabor\OLE DB Destination Middleware.Inputs[OLE DB Destination Input].ExternalColumns[tech_code]"
+                      codePage="1252"
+                      dataType="str"
+                      length="10"
+                      name="tech_code" />
+                    <externalMetadataColumn
+                      refId="Package\Insert Shopware to tblLabor\OLE DB Destination Middleware.Inputs[OLE DB Destination Input].ExternalColumns[sales_code]"
+                      codePage="1252"
+                      dataType="str"
+                      length="10"
+                      name="sales_code" />
+                    <externalMetadataColumn
+                      refId="Package\Insert Shopware to tblLabor\OLE DB Destination Middleware.Inputs[OLE DB Destination Input].ExternalColumns[sell]"
+                      dataType="numeric"
+                      name="sell"
+                      precision="11"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Insert Shopware to tblLabor\OLE DB Destination Middleware.Inputs[OLE DB Destination Input].ExternalColumns[trans_date]"
+                      dataType="numeric"
+                      name="trans_date"
+                      precision="6" />
+                    <externalMetadataColumn
+                      refId="Package\Insert Shopware to tblLabor\OLE DB Destination Middleware.Inputs[OLE DB Destination Input].ExternalColumns[store_id]"
+                      codePage="1252"
+                      dataType="str"
+                      length="3"
+                      name="store_id" />
+                    <externalMetadataColumn
+                      refId="Package\Insert Shopware to tblLabor\OLE DB Destination Middleware.Inputs[OLE DB Destination Input].ExternalColumns[control_no]"
+                      dataType="numeric"
+                      name="control_no"
+                      precision="6" />
+                    <externalMetadataColumn
+                      refId="Package\Insert Shopware to tblLabor\OLE DB Destination Middleware.Inputs[OLE DB Destination Input].ExternalColumns[part_no]"
+                      codePage="1252"
+                      dataType="str"
+                      length="20"
+                      name="part_no" />
+                    <externalMetadataColumn
+                      refId="Package\Insert Shopware to tblLabor\OLE DB Destination Middleware.Inputs[OLE DB Destination Input].ExternalColumns[qty]"
+                      dataType="numeric"
+                      name="qty"
+                      precision="11"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Insert Shopware to tblLabor\OLE DB Destination Middleware.Inputs[OLE DB Destination Input].ExternalColumns[ConvDate]"
+                      dataType="dbTimeStamp"
+                      name="ConvDate" />
+                    <externalMetadataColumn
+                      refId="Package\Insert Shopware to tblLabor\OLE DB Destination Middleware.Inputs[OLE DB Destination Input].ExternalColumns[Labor]"
+                      dataType="numeric"
+                      name="Labor"
+                      precision="23"
+                      scale="4" />
+                    <externalMetadataColumn
+                      refId="Package\Insert Shopware to tblLabor\OLE DB Destination Middleware.Inputs[OLE DB Destination Input].ExternalColumns[EmployeeNum]"
+                      codePage="1252"
+                      dataType="str"
+                      length="7"
+                      name="EmployeeNum" />
+                    <externalMetadataColumn
+                      refId="Package\Insert Shopware to tblLabor\OLE DB Destination Middleware.Inputs[OLE DB Destination Input].ExternalColumns[drawer_dt]"
+                      dataType="i4"
+                      name="drawer_dt" />
+                    <externalMetadataColumn
+                      refId="Package\Insert Shopware to tblLabor\OLE DB Destination Middleware.Inputs[OLE DB Destination Input].ExternalColumns[ConvDrawerDate]"
+                      dataType="dbTimeStamp"
+                      name="ConvDrawerDate" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Insert Shopware to tblLabor\OLE DB Destination Middleware.Outputs[OLE DB Destination Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="OLE DB Destination Error Output"
+                  synchronousInputId="Package\Insert Shopware to tblLabor\OLE DB Destination Middleware.Inputs[OLE DB Destination Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Insert Shopware to tblLabor\OLE DB Destination Middleware.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Insert Shopware to tblLabor\OLE DB Destination Middleware.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Insert Shopware to tblLabor\OLE DB Destination Middleware.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Insert Shopware to tblLabor\OLE DB Destination Middleware.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware"
+              componentClassID="Microsoft.OLEDBSource"
+              contactInfo="OLE DB Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;7"
+              description="OLE DB Source"
+              name="OLE DB Source Shopware"
+              usesDispositions="true"
+              version="7">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">[dbo].[vw_tblLabor]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                <property
+                  dataType="System.String"
+                  description="The variable that contains the SQL command to be executed."
+                  name="SqlCommandVariable"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">0</property>
+                <property
+                  dataType="System.String"
+                  description="The mappings between the parameters in the SQL command and variables."
+                  name="ParameterMapping"></property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[brakesql.Shopware]"
+                  connectionManagerRefId="Package.ConnectionManagers[brakesql.Shopware]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <outputs>
+                <output
+                  refId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Output]"
+                  name="OLE DB Source Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Output].Columns[shop_id]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Output].ExternalColumns[shop_id]"
+                      length="48"
+                      lineageId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Output].Columns[shop_id]"
+                      name="shop_id"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Output].Columns[TechCode]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Output].ExternalColumns[TechCode]"
+                      lineageId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Output].Columns[TechCode]"
+                      name="TechCode"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Output].Columns[technician_id]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Output].ExternalColumns[technician_id]"
+                      lineageId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Output].Columns[technician_id]"
+                      name="technician_id"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Output].Columns[RONumber]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Output].ExternalColumns[RONumber]"
+                      lineageId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Output].Columns[RONumber]"
+                      name="RONumber"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Output].Columns[ClosedDate]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Output].ExternalColumns[ClosedDate]"
+                      length="10"
+                      lineageId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Output].Columns[ClosedDate]"
+                      name="ClosedDate"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Output].Columns[ConvDate]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Output].ExternalColumns[ConvDate]"
+                      length="10"
+                      lineageId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Output].Columns[ConvDate]"
+                      name="ConvDate"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Output].Columns[ConvDrawerDate]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Output].ExternalColumns[ConvDrawerDate]"
+                      length="10"
+                      lineageId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Output].Columns[ConvDrawerDate]"
+                      name="ConvDrawerDate"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Output].Columns[name]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Output].ExternalColumns[name]"
+                      length="1500"
+                      lineageId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Output].Columns[name]"
+                      name="name"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Output].Columns[qty]"
+                      dataType="r8"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Output].ExternalColumns[qty]"
+                      lineageId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Output].Columns[qty]"
+                      name="qty"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Output].Columns[labor]"
+                      dataType="r8"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Output].ExternalColumns[labor]"
+                      lineageId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Output].Columns[labor]"
+                      name="labor"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Output].Columns[sell]"
+                      dataType="numeric"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Output].ExternalColumns[sell]"
+                      lineageId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Output].Columns[sell]"
+                      name="sell"
+                      precision="18"
+                      scale="6"
+                      truncationRowDisposition="FailComponent" />
+                  </outputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Output].ExternalColumns[shop_id]"
+                      dataType="wstr"
+                      length="48"
+                      name="shop_id" />
+                    <externalMetadataColumn
+                      refId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Output].ExternalColumns[TechCode]"
+                      dataType="i4"
+                      name="TechCode" />
+                    <externalMetadataColumn
+                      refId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Output].ExternalColumns[technician_id]"
+                      dataType="i4"
+                      name="technician_id" />
+                    <externalMetadataColumn
+                      refId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Output].ExternalColumns[RONumber]"
+                      dataType="i4"
+                      name="RONumber" />
+                    <externalMetadataColumn
+                      refId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Output].ExternalColumns[ClosedDate]"
+                      codePage="1252"
+                      dataType="str"
+                      length="10"
+                      name="ClosedDate" />
+                    <externalMetadataColumn
+                      refId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Output].ExternalColumns[ConvDate]"
+                      codePage="1252"
+                      dataType="str"
+                      length="10"
+                      name="ConvDate" />
+                    <externalMetadataColumn
+                      refId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Output].ExternalColumns[ConvDrawerDate]"
+                      codePage="1252"
+                      dataType="str"
+                      length="10"
+                      name="ConvDrawerDate" />
+                    <externalMetadataColumn
+                      refId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Output].ExternalColumns[name]"
+                      dataType="wstr"
+                      length="1500"
+                      name="name" />
+                    <externalMetadataColumn
+                      refId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Output].ExternalColumns[qty]"
+                      dataType="r8"
+                      name="qty" />
+                    <externalMetadataColumn
+                      refId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Output].ExternalColumns[labor]"
+                      dataType="r8"
+                      name="labor" />
+                    <externalMetadataColumn
+                      refId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Output].ExternalColumns[sell]"
+                      dataType="numeric"
+                      name="sell"
+                      precision="18"
+                      scale="6" />
+                  </externalMetadataColumns>
+                </output>
+                <output
+                  refId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Error Output]"
+                  isErrorOut="true"
+                  name="OLE DB Source Error Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Error Output].Columns[shop_id]"
+                      dataType="wstr"
+                      length="48"
+                      lineageId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Error Output].Columns[shop_id]"
+                      name="shop_id" />
+                    <outputColumn
+                      refId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Error Output].Columns[TechCode]"
+                      dataType="i4"
+                      lineageId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Error Output].Columns[TechCode]"
+                      name="TechCode" />
+                    <outputColumn
+                      refId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Error Output].Columns[technician_id]"
+                      dataType="i4"
+                      lineageId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Error Output].Columns[technician_id]"
+                      name="technician_id" />
+                    <outputColumn
+                      refId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Error Output].Columns[RONumber]"
+                      dataType="i4"
+                      lineageId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Error Output].Columns[RONumber]"
+                      name="RONumber" />
+                    <outputColumn
+                      refId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Error Output].Columns[ClosedDate]"
+                      codePage="1252"
+                      dataType="str"
+                      length="10"
+                      lineageId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Error Output].Columns[ClosedDate]"
+                      name="ClosedDate" />
+                    <outputColumn
+                      refId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Error Output].Columns[ConvDate]"
+                      codePage="1252"
+                      dataType="str"
+                      length="10"
+                      lineageId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Error Output].Columns[ConvDate]"
+                      name="ConvDate" />
+                    <outputColumn
+                      refId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Error Output].Columns[ConvDrawerDate]"
+                      codePage="1252"
+                      dataType="str"
+                      length="10"
+                      lineageId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Error Output].Columns[ConvDrawerDate]"
+                      name="ConvDrawerDate" />
+                    <outputColumn
+                      refId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Error Output].Columns[name]"
+                      dataType="wstr"
+                      length="1500"
+                      lineageId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Error Output].Columns[name]"
+                      name="name" />
+                    <outputColumn
+                      refId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Error Output].Columns[qty]"
+                      dataType="r8"
+                      lineageId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Error Output].Columns[qty]"
+                      name="qty" />
+                    <outputColumn
+                      refId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Error Output].Columns[labor]"
+                      dataType="r8"
+                      lineageId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Error Output].Columns[labor]"
+                      name="labor" />
+                    <outputColumn
+                      refId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Error Output].Columns[sell]"
+                      dataType="numeric"
+                      lineageId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Error Output].Columns[sell]"
+                      name="sell"
+                      precision="18"
+                      scale="6" />
+                    <outputColumn
+                      refId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path
+              refId="Package\Insert Shopware to tblLabor.Paths[Data Conversion Output]"
+              endId="Package\Insert Shopware to tblLabor\OLE DB Destination Middleware.Inputs[OLE DB Destination Input]"
+              name="Data Conversion Output"
+              startId="Package\Insert Shopware to tblLabor\Data Conversion for shop_id.Outputs[Data Conversion Output]" />
+            <path
+              refId="Package\Insert Shopware to tblLabor.Paths[OLE DB Source Output]"
+              endId="Package\Insert Shopware to tblLabor\Data Conversion for shop_id.Inputs[Data Conversion Input]"
+              name="OLE DB Source Output"
+              startId="Package\Insert Shopware to tblLabor\OLE DB Source Shopware.Outputs[OLE DB Source Output]" />
+          </paths>
+        </pipeline>
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph">
+        <NodeLayout
+          Size="214,42"
+          Id="Package\Insert Shopware to tblLabor"
+          TopLeft="86,65" />
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+  <TaskHost
+    design-time-name="Package\Insert Shopware to tblLabor">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="8" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="209,42"
+          Id="Package\Insert Shopware to tblLabor\OLE DB Source Shopware"
+          TopLeft="110,35" />
+        <NodeLayout
+          Size="237,42"
+          Id="Package\Insert Shopware to tblLabor\OLE DB Destination Middleware"
+          TopLeft="243,160" />
+        <NodeLayout
+          Size="218,42"
+          Id="Package\Insert Shopware to tblLabor\Data Conversion for shop_id"
+          TopLeft="441,92" />
+        <EdgeLayout
+          Id="Package\Insert Shopware to tblLabor.Paths[OLE DB Source Output]"
+          TopLeft="319,56">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="122,57"
+              Start="0,0"
+              End="114.5,57">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="57,0" />
+                  <mssgle:CubicBezierSegment
+                    Point1="57,0"
+                    Point2="61,0"
+                    Point3="61,4" />
+                  <mssgle:LineSegment
+                    End="61,53" />
+                  <mssgle:CubicBezierSegment
+                    Point1="61,53"
+                    Point2="61,57"
+                    Point3="65,57" />
+                  <mssgle:LineSegment
+                    End="114.5,57" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Insert Shopware to tblLabor.Paths[Data Conversion Output]"
+          TopLeft="550,134">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-188.5,26"
+              Start="0,0"
+              End="-188.5,18.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,9" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,9"
+                    Point2="0,13"
+                    Point3="-4,13" />
+                  <mssgle:LineSegment
+                    End="-184.5,13" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-184.5,13"
+                    Point2="-188.5,13"
+                    Point3="-188.5,17" />
+                  <mssgle:LineSegment
+                    End="-188.5,18.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Insert Shopware to tblLabor\OLE DB Source Shopware">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">View</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\Insert Shopware to tblLabor\OLE DB Destination Middleware">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>

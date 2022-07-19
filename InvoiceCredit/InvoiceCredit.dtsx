@@ -1,0 +1,796 @@
+﻿<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="6/7/2022 1:13:17 PM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="BMASTPC40"
+  DTS:CreatorName="BRAKE_NT\Steve.Waibel"
+  DTS:DTSID="{22F1C072-E12A-4343-9F69-97985D941A45}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="15.0.2000.157"
+  DTS:LocaleID="1033"
+  DTS:ObjectName="InvoiceCredit"
+  DTS:PackageType="5"
+  DTS:VersionBuild="6"
+  DTS:VersionGUID="{A633AC00-C1B0-4CF0-BF5B-8C54CDF34B74}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[brakesql.Shopware]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{5AA366B3-1FBE-4984-A0AD-3ECDA6FF7348}"
+      DTS:ObjectName="brakesql.Shopware">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectionString="Data Source=brakesql;Initial Catalog=Shopware;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:Variables />
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\Add Market"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{E4A1DDE5-7A0C-4713-9B2F-826251281951}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Add Market"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{5AA366B3-1FBE-4984-A0AD-3ECDA6FF7348}"
+          SQLTask:BypassPrepare="False"
+          SQLTask:SqlStatementSource="Update   dbo.RO_InvoiceCredit&#xA;Set dbo.RO_InvoiceCredit.[Market] = dbo.Stores.[Company]&#xA;FROM            dbo.Stores INNER JOIN&#xA;                        dbo.RO_InvoiceCredit ON dbo.Stores.StoreNum = dbo.RO_InvoiceCredit.shop_id" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Add the RO Total"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{6D1073BE-4519-4598-B58F-60EEEBE7E8DC}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Add the RO Total"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{5AA366B3-1FBE-4984-A0AD-3ECDA6FF7348}"
+          SQLTask:BypassPrepare="False"
+          SQLTask:SqlStatementSource="Update   dbo.RO_InvoiceCredit&#xA;Set dbo.RO_InvoiceCredit.[InvoiceTotal] = dbo.vw_ROGrandTotal.[InvoiceTotal]&#xA;FROM            dbo.vw_ROGrandTotal INNER JOIN&#xA;                        dbo.RO_InvoiceCredit ON dbo.vw_ROGrandTotal.RONumber = dbo.RO_InvoiceCredit.RONumber " xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Calculate Over-Under"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{33E1A413-314A-4E9E-AA0E-FD5E73938E00}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Calculate Over-Under"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{5AA366B3-1FBE-4984-A0AD-3ECDA6FF7348}"
+          SQLTask:BypassPrepare="False"
+          SQLTask:SqlStatementSource="Update [dbo].[RO_InvoiceCredit]&#xA;set OverUnder = InvoiceTotal - TotalPaid&#xA;&#xA;Update [dbo].[RO_InvoiceCredit]&#xA;set OverUnder = CASE&#xA;WHEN TotalPaid &gt; 0 then InvoiceTotal - TotalPaid&#xA;ELSE InvoiceTotal + TotalPaid&#xA;END" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Execute SQL Task"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{68CC2035-40F8-4E2D-86D9-CF219D15E77F}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Execute SQL Task"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{5AA366B3-1FBE-4984-A0AD-3ECDA6FF7348}"
+          SQLTask:BypassPrepare="False"
+          SQLTask:SqlStatementSource="truncate table RO_InvoiceCredit" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Get Payments Last 30 days"
+      DTS:CreationName="Microsoft.Pipeline"
+      DTS:Description="Data Flow Task"
+      DTS:DTSID="{539950FB-7CF8-4129-9B96-A36A0B813A3B}"
+      DTS:ExecutableType="Microsoft.Pipeline"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Get Payments Last 30 days"
+      DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <pipeline
+          version="1">
+          <components>
+            <component
+              refId="Package\Get Payments Last 30 days\OLE DB Destination"
+              componentClassID="Microsoft.OLEDBDestination"
+              contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
+              description="OLE DB Destination"
+              name="OLE DB Destination"
+              usesDispositions="true"
+              version="4">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">[dbo].[RO_InvoiceCredit]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">3</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepIdentity">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the columns containing null will have null inserted in the destination. If false, columns containing null will have their default values inserted at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepNulls">false</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies options to be used with fast load.  Applies only if fast load is turned on."
+                  name="FastLoadOptions">TABLOCK,CHECK_CONSTRAINTS</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion.  Applies only if fast load is turned on."
+                  name="FastLoadMaxInsertCommitSize">2147483647</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Get Payments Last 30 days\OLE DB Destination.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[brakesql.Shopware]"
+                  connectionManagerRefId="Package.ConnectionManagers[brakesql.Shopware]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Get Payments Last 30 days\OLE DB Destination.Inputs[OLE DB Destination Input]"
+                  errorOrTruncationOperation="Insert"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="OLE DB Destination Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Get Payments Last 30 days\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[RONumber]"
+                      cachedDataType="i4"
+                      cachedName="RONumber"
+                      externalMetadataColumnId="Package\Get Payments Last 30 days\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[RONumber]"
+                      lineageId="Package\Get Payments Last 30 days\OLE DB Source.Outputs[OLE DB Source Output].Columns[RONumber]" />
+                    <inputColumn
+                      refId="Package\Get Payments Last 30 days\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[shop_id]"
+                      cachedDataType="wstr"
+                      cachedLength="48"
+                      cachedName="shop_id"
+                      externalMetadataColumnId="Package\Get Payments Last 30 days\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Shop_id]"
+                      lineageId="Package\Get Payments Last 30 days\OLE DB Source.Outputs[OLE DB Source Output].Columns[shop_id]" />
+                    <inputColumn
+                      refId="Package\Get Payments Last 30 days\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[ClosedDate]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="10"
+                      cachedName="ClosedDate"
+                      externalMetadataColumnId="Package\Get Payments Last 30 days\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[ClosedDate]"
+                      lineageId="Package\Get Payments Last 30 days\OLE DB Source.Outputs[OLE DB Source Output].Columns[ClosedDate]" />
+                    <inputColumn
+                      refId="Package\Get Payments Last 30 days\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[LastPaymentDate]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="10"
+                      cachedName="LastPaymentDate"
+                      externalMetadataColumnId="Package\Get Payments Last 30 days\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[LastPaymentDate]"
+                      lineageId="Package\Get Payments Last 30 days\OLE DB Source.Outputs[OLE DB Source Output].Columns[LastPaymentDate]" />
+                    <inputColumn
+                      refId="Package\Get Payments Last 30 days\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[TotalPaid]"
+                      cachedDataType="numeric"
+                      cachedName="TotalPaid"
+                      cachedPrecision="38"
+                      cachedScale="2"
+                      externalMetadataColumnId="Package\Get Payments Last 30 days\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[TotalPaid]"
+                      lineageId="Package\Get Payments Last 30 days\OLE DB Source.Outputs[OLE DB Source Output].Columns[TotalPaid]" />
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Get Payments Last 30 days\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[RONumber]"
+                      dataType="i4"
+                      name="RONumber" />
+                    <externalMetadataColumn
+                      refId="Package\Get Payments Last 30 days\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Market]"
+                      dataType="wstr"
+                      length="3"
+                      name="Market" />
+                    <externalMetadataColumn
+                      refId="Package\Get Payments Last 30 days\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Shop_id]"
+                      dataType="i4"
+                      name="Shop_id" />
+                    <externalMetadataColumn
+                      refId="Package\Get Payments Last 30 days\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[LastPaymentDate]"
+                      dataType="dbDate"
+                      name="LastPaymentDate" />
+                    <externalMetadataColumn
+                      refId="Package\Get Payments Last 30 days\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[ClosedDate]"
+                      dataType="dbDate"
+                      name="ClosedDate" />
+                    <externalMetadataColumn
+                      refId="Package\Get Payments Last 30 days\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[InvoiceTotal]"
+                      dataType="numeric"
+                      name="InvoiceTotal"
+                      precision="11"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Get Payments Last 30 days\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[TotalPaid]"
+                      dataType="numeric"
+                      name="TotalPaid"
+                      precision="11"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Get Payments Last 30 days\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[OverUnder]"
+                      dataType="numeric"
+                      name="OverUnder"
+                      precision="12"
+                      scale="2" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Get Payments Last 30 days\OLE DB Destination.Outputs[OLE DB Destination Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="OLE DB Destination Error Output"
+                  synchronousInputId="Package\Get Payments Last 30 days\OLE DB Destination.Inputs[OLE DB Destination Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Get Payments Last 30 days\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Get Payments Last 30 days\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Get Payments Last 30 days\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Get Payments Last 30 days\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Get Payments Last 30 days\OLE DB Source"
+              componentClassID="Microsoft.OLEDBSource"
+              contactInfo="OLE DB Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;7"
+              description="OLE DB Source"
+              name="OLE DB Source"
+              usesDispositions="true"
+              version="7">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset"></property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">SELECT 
+      [RONumber]
+	   ,[shop_id]
+      ,[ClosedDate]
+      ,Max([PaymentDate]) as LastPaymentDate
+     
+      ,sum([PaymentDollars]) as TotalPaid
+    
+    
+  FROM [Shopware].[dbo].[vw_ROPayments]
+  where Paymentdate &gt;= getdate() -30
+  Group by RONumber, Shop_id, ClosedDate</property>
+                <property
+                  dataType="System.String"
+                  description="The variable that contains the SQL command to be executed."
+                  name="SqlCommandVariable"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">2</property>
+                <property
+                  dataType="System.String"
+                  description="The mappings between the parameters in the SQL command and variables."
+                  name="ParameterMapping"></property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Get Payments Last 30 days\OLE DB Source.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[brakesql.Shopware]"
+                  connectionManagerRefId="Package.ConnectionManagers[brakesql.Shopware]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <outputs>
+                <output
+                  refId="Package\Get Payments Last 30 days\OLE DB Source.Outputs[OLE DB Source Output]"
+                  name="OLE DB Source Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Get Payments Last 30 days\OLE DB Source.Outputs[OLE DB Source Output].Columns[RONumber]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Get Payments Last 30 days\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[RONumber]"
+                      lineageId="Package\Get Payments Last 30 days\OLE DB Source.Outputs[OLE DB Source Output].Columns[RONumber]"
+                      name="RONumber"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Get Payments Last 30 days\OLE DB Source.Outputs[OLE DB Source Output].Columns[shop_id]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Get Payments Last 30 days\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[shop_id]"
+                      length="48"
+                      lineageId="Package\Get Payments Last 30 days\OLE DB Source.Outputs[OLE DB Source Output].Columns[shop_id]"
+                      name="shop_id"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Get Payments Last 30 days\OLE DB Source.Outputs[OLE DB Source Output].Columns[ClosedDate]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Get Payments Last 30 days\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[ClosedDate]"
+                      length="10"
+                      lineageId="Package\Get Payments Last 30 days\OLE DB Source.Outputs[OLE DB Source Output].Columns[ClosedDate]"
+                      name="ClosedDate"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Get Payments Last 30 days\OLE DB Source.Outputs[OLE DB Source Output].Columns[LastPaymentDate]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Get Payments Last 30 days\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[LastPaymentDate]"
+                      length="10"
+                      lineageId="Package\Get Payments Last 30 days\OLE DB Source.Outputs[OLE DB Source Output].Columns[LastPaymentDate]"
+                      name="LastPaymentDate"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Get Payments Last 30 days\OLE DB Source.Outputs[OLE DB Source Output].Columns[TotalPaid]"
+                      dataType="numeric"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Get Payments Last 30 days\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[TotalPaid]"
+                      lineageId="Package\Get Payments Last 30 days\OLE DB Source.Outputs[OLE DB Source Output].Columns[TotalPaid]"
+                      name="TotalPaid"
+                      precision="38"
+                      scale="2"
+                      truncationRowDisposition="FailComponent" />
+                  </outputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Get Payments Last 30 days\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[RONumber]"
+                      dataType="i4"
+                      name="RONumber" />
+                    <externalMetadataColumn
+                      refId="Package\Get Payments Last 30 days\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[shop_id]"
+                      dataType="wstr"
+                      length="48"
+                      name="shop_id" />
+                    <externalMetadataColumn
+                      refId="Package\Get Payments Last 30 days\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[ClosedDate]"
+                      codePage="1252"
+                      dataType="str"
+                      length="10"
+                      name="ClosedDate" />
+                    <externalMetadataColumn
+                      refId="Package\Get Payments Last 30 days\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[LastPaymentDate]"
+                      codePage="1252"
+                      dataType="str"
+                      length="10"
+                      name="LastPaymentDate" />
+                    <externalMetadataColumn
+                      refId="Package\Get Payments Last 30 days\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[TotalPaid]"
+                      dataType="numeric"
+                      name="TotalPaid"
+                      precision="38"
+                      scale="2" />
+                  </externalMetadataColumns>
+                </output>
+                <output
+                  refId="Package\Get Payments Last 30 days\OLE DB Source.Outputs[OLE DB Source Error Output]"
+                  isErrorOut="true"
+                  name="OLE DB Source Error Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Get Payments Last 30 days\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[RONumber]"
+                      dataType="i4"
+                      lineageId="Package\Get Payments Last 30 days\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[RONumber]"
+                      name="RONumber" />
+                    <outputColumn
+                      refId="Package\Get Payments Last 30 days\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[shop_id]"
+                      dataType="wstr"
+                      length="48"
+                      lineageId="Package\Get Payments Last 30 days\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[shop_id]"
+                      name="shop_id" />
+                    <outputColumn
+                      refId="Package\Get Payments Last 30 days\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ClosedDate]"
+                      codePage="1252"
+                      dataType="str"
+                      length="10"
+                      lineageId="Package\Get Payments Last 30 days\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ClosedDate]"
+                      name="ClosedDate" />
+                    <outputColumn
+                      refId="Package\Get Payments Last 30 days\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[LastPaymentDate]"
+                      codePage="1252"
+                      dataType="str"
+                      length="10"
+                      lineageId="Package\Get Payments Last 30 days\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[LastPaymentDate]"
+                      name="LastPaymentDate" />
+                    <outputColumn
+                      refId="Package\Get Payments Last 30 days\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[TotalPaid]"
+                      dataType="numeric"
+                      lineageId="Package\Get Payments Last 30 days\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[TotalPaid]"
+                      name="TotalPaid"
+                      precision="38"
+                      scale="2" />
+                    <outputColumn
+                      refId="Package\Get Payments Last 30 days\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Get Payments Last 30 days\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Get Payments Last 30 days\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Get Payments Last 30 days\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path
+              refId="Package\Get Payments Last 30 days.Paths[OLE DB Source Output]"
+              endId="Package\Get Payments Last 30 days\OLE DB Destination.Inputs[OLE DB Destination Input]"
+              name="OLE DB Source Output"
+              startId="Package\Get Payments Last 30 days\OLE DB Source.Outputs[OLE DB Source Output]" />
+          </paths>
+        </pipeline>
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:PrecedenceConstraints>
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint]"
+      DTS:CreationName=""
+      DTS:DTSID="{31053C27-616B-4A13-A41F-41195DABE154}"
+      DTS:From="Package\Execute SQL Task"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint"
+      DTS:To="Package\Get Payments Last 30 days" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 1]"
+      DTS:CreationName=""
+      DTS:DTSID="{B98FD259-5CC0-44F3-AA85-9AEC01A53D32}"
+      DTS:From="Package\Get Payments Last 30 days"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 1"
+      DTS:To="Package\Add the RO Total" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 2]"
+      DTS:CreationName=""
+      DTS:DTSID="{8ABE1A1D-EA01-4E6A-81E1-FA96273D7FD6}"
+      DTS:From="Package\Add the RO Total"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 2"
+      DTS:To="Package\Calculate Over-Under" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 3]"
+      DTS:CreationName=""
+      DTS:DTSID="{10890055-E8CB-4B9A-B7CA-CC5A698719ED}"
+      DTS:From="Package\Calculate Over-Under"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 3"
+      DTS:To="Package\Add Market" />
+  </DTS:PrecedenceConstraints>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="16" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="214,42"
+          Id="Package\Get Payments Last 30 days"
+          TopLeft="146,132" />
+        <NodeLayout
+          Size="170,42"
+          Id="Package\Execute SQL Task"
+          TopLeft="137,55" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint]"
+          TopLeft="222,97">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="31,35"
+              Start="0,0"
+              End="31,27.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,13.5" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,13.5"
+                    Point2="0,17.5"
+                    Point3="4,17.5" />
+                  <mssgle:LineSegment
+                    End="27,17.5" />
+                  <mssgle:CubicBezierSegment
+                    Point1="27,17.5"
+                    Point2="31,17.5"
+                    Point3="31,21.5" />
+                  <mssgle:LineSegment
+                    End="31,27.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <NodeLayout
+          Size="164,42"
+          Id="Package\Add the RO Total"
+          TopLeft="209,199" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 1]"
+          TopLeft="253,174">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="38,25"
+              Start="0,0"
+              End="38,17.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,8.5" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,8.5"
+                    Point2="0,12.5"
+                    Point3="4,12.5" />
+                  <mssgle:LineSegment
+                    End="34,12.5" />
+                  <mssgle:CubicBezierSegment
+                    Point1="34,12.5"
+                    Point2="38,12.5"
+                    Point3="38,16.5" />
+                  <mssgle:LineSegment
+                    End="38,17.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <NodeLayout
+          Size="185,42"
+          Id="Package\Calculate Over-Under"
+          TopLeft="309,276" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 2]"
+          TopLeft="291,241">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="110.5,35"
+              Start="0,0"
+              End="110.5,27.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,13.5" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,13.5"
+                    Point2="0,17.5"
+                    Point3="4,17.5" />
+                  <mssgle:LineSegment
+                    End="106.5,17.5" />
+                  <mssgle:CubicBezierSegment
+                    Point1="106.5,17.5"
+                    Point2="110.5,17.5"
+                    Point3="110.5,21.5" />
+                  <mssgle:LineSegment
+                    End="110.5,27.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <NodeLayout
+          Size="135,42"
+          Id="Package\Add Market"
+          TopLeft="408,358" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 3]"
+          TopLeft="401.5,318">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="74,40"
+              Start="0,0"
+              End="74,32.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,16" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,16"
+                    Point2="0,20"
+                    Point3="4,20" />
+                  <mssgle:LineSegment
+                    End="70,20" />
+                  <mssgle:CubicBezierSegment
+                    Point1="70,20"
+                    Point2="74,20"
+                    Point3="74,24" />
+                  <mssgle:LineSegment
+                    End="74,32.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+  <TaskHost
+    design-time-name="Package\Get Payments Last 30 days">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="157,42"
+          Id="Package\Get Payments Last 30 days\OLE DB Source"
+          TopLeft="84,53" />
+        <NodeLayout
+          Size="177,42"
+          Id="Package\Get Payments Last 30 days\OLE DB Destination"
+          TopLeft="196,187" />
+        <EdgeLayout
+          Id="Package\Get Payments Last 30 days.Paths[OLE DB Source Output]"
+          TopLeft="162.5,95">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="122,92"
+              Start="0,0"
+              End="122,84.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,42" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,42"
+                    Point2="0,46"
+                    Point3="4,46" />
+                  <mssgle:LineSegment
+                    End="118,46" />
+                  <mssgle:CubicBezierSegment
+                    Point1="118,46"
+                    Point2="122,46"
+                    Point3="122,50" />
+                  <mssgle:LineSegment
+                    End="122,84.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Get Payments Last 30 days\OLE DB Source">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\Get Payments Last 30 days\OLE DB Destination">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>

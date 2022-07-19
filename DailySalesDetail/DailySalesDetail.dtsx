@@ -1,0 +1,2258 @@
+﻿<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="7/27/2021 4:18:22 PM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="BMASTPC40"
+  DTS:CreatorName="BRAKE_NT\Steve.Waibel"
+  DTS:DTSID="{4357181E-5482-46BA-A094-9B41061BFAFB}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="15.0.2000.157"
+  DTS:LocaleID="1033"
+  DTS:ObjectName="DailySalesDetail"
+  DTS:PackageType="5"
+  DTS:VersionBuild="11"
+  DTS:VersionGUID="{27352F38-C235-425B-A061-42A7724716C7}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[brakesql.Middleware]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{4D000619-7B45-4B0B-8398-7B0108150FD5}"
+      DTS:ObjectName="brakesql.Middleware">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectionString="Data Source=brakesql;Initial Catalog=Middleware;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[brakesql.Shopware]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{11303856-C322-4259-995B-59CEA7B2F003}"
+      DTS:ObjectName="brakesql.Shopware">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectionString="Data Source=brakesql;Initial Catalog=Shopware;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:Variables />
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\Import labor detail"
+      DTS:CreationName="Microsoft.Pipeline"
+      DTS:Description="Data Flow Task"
+      DTS:DTSID="{A942D290-026C-4646-AF99-B2159BB43B07}"
+      DTS:ExecutableType="Microsoft.Pipeline"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Import labor detail"
+      DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <pipeline
+          version="1">
+          <components>
+            <component
+              refId="Package\Import labor detail\Data Conversion"
+              componentClassID="Microsoft.DataConvert"
+              contactInfo="Data Conversion;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;0"
+              description="Data Conversion"
+              name="Data Conversion"
+              usesDispositions="true">
+              <inputs>
+                <input
+                  refId="Package\Import labor detail\Data Conversion.Inputs[Data Conversion Input]"
+                  name="Data Conversion Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Import labor detail\Data Conversion.Inputs[Data Conversion Input].Columns[shop_id]"
+                      cachedDataType="wstr"
+                      cachedLength="48"
+                      cachedName="shop_id"
+                      lineageId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].Columns[shop_id]" />
+                    <inputColumn
+                      refId="Package\Import labor detail\Data Conversion.Inputs[Data Conversion Input].Columns[TechCode]"
+                      cachedDataType="wstr"
+                      cachedLength="4"
+                      cachedName="TechCode"
+                      lineageId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].Columns[TechCode]" />
+                    <inputColumn
+                      refId="Package\Import labor detail\Data Conversion.Inputs[Data Conversion Input].Columns[Desc]"
+                      cachedDataType="nText"
+                      cachedName="Desc"
+                      lineageId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].Columns[Desc]" />
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Import labor detail\Data Conversion.Outputs[Data Conversion Output]"
+                  exclusionGroup="1"
+                  name="Data Conversion Output"
+                  synchronousInputId="Package\Import labor detail\Data Conversion.Inputs[Data Conversion Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Import labor detail\Data Conversion.Outputs[Data Conversion Output].Columns[store_id]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      length="3"
+                      lineageId="Package\Import labor detail\Data Conversion.Outputs[Data Conversion Output].Columns[store_id]"
+                      name="store_id"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Specifies the input column used as the source of data for the conversion."
+                          name="SourceInputColumnLineageID">#{Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].Columns[shop_id]}</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                          name="FastParse">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Import labor detail\Data Conversion.Outputs[Data Conversion Output].Columns[tech_no]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      length="4"
+                      lineageId="Package\Import labor detail\Data Conversion.Outputs[Data Conversion Output].Columns[tech_no]"
+                      name="tech_no"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Specifies the input column used as the source of data for the conversion."
+                          name="SourceInputColumnLineageID">#{Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].Columns[TechCode]}</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                          name="FastParse">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Import labor detail\Data Conversion.Outputs[Data Conversion Output].Columns[descript]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      length="50"
+                      lineageId="Package\Import labor detail\Data Conversion.Outputs[Data Conversion Output].Columns[descript]"
+                      name="descript"
+                      truncationRowDisposition="IgnoreFailure">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Specifies the input column used as the source of data for the conversion."
+                          name="SourceInputColumnLineageID">#{Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].Columns[Desc]}</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                          name="FastParse">false</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Import labor detail\Data Conversion.Outputs[Data Conversion Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Data Conversion Error Output"
+                  synchronousInputId="Package\Import labor detail\Data Conversion.Inputs[Data Conversion Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Import labor detail\Data Conversion.Outputs[Data Conversion Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Import labor detail\Data Conversion.Outputs[Data Conversion Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Import labor detail\Data Conversion.Outputs[Data Conversion Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Import labor detail\Data Conversion.Outputs[Data Conversion Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Import labor detail\OLE DB Destination"
+              componentClassID="Microsoft.OLEDBDestination"
+              contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
+              description="OLE DB Destination"
+              name="OLE DB Destination"
+              usesDispositions="true"
+              version="4">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">[dbo].[tblDailySalesDetail]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">3</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepIdentity">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the columns containing null will have null inserted in the destination. If false, columns containing null will have their default values inserted at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepNulls">false</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies options to be used with fast load.  Applies only if fast load is turned on."
+                  name="FastLoadOptions">TABLOCK,CHECK_CONSTRAINTS</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion.  Applies only if fast load is turned on."
+                  name="FastLoadMaxInsertCommitSize">2147483647</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Import labor detail\OLE DB Destination.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[brakesql.Middleware]"
+                  connectionManagerRefId="Package.ConnectionManagers[brakesql.Middleware]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input]"
+                  errorOrTruncationOperation="Insert"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="OLE DB Destination Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[trans_date]"
+                      cachedDataType="i4"
+                      cachedName="trans_date"
+                      externalMetadataColumnId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[trans_date]"
+                      lineageId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].Columns[trans_date]" />
+                    <inputColumn
+                      refId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[PHDrawerDate]"
+                      cachedDataType="i4"
+                      cachedName="PHDrawerDate"
+                      externalMetadataColumnId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PHDrawerDate]"
+                      lineageId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].Columns[PHDrawerDate]" />
+                    <inputColumn
+                      refId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[qty]"
+                      cachedDataType="r8"
+                      cachedName="qty"
+                      externalMetadataColumnId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[qty]"
+                      lineageId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].Columns[qty]" />
+                    <inputColumn
+                      refId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[priority]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="1"
+                      cachedName="priority"
+                      externalMetadataColumnId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[priority]"
+                      lineageId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].Columns[priority]" />
+                    <inputColumn
+                      refId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[sell]"
+                      cachedDataType="numeric"
+                      cachedName="sell"
+                      cachedPrecision="18"
+                      cachedScale="6"
+                      externalMetadataColumnId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[sell]"
+                      lineageId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].Columns[sell]" />
+                    <inputColumn
+                      refId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[part_mfg]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="3"
+                      cachedName="part_mfg"
+                      externalMetadataColumnId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[part_mfg]"
+                      lineageId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].Columns[part_mfg]" />
+                    <inputColumn
+                      refId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[part_no]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="5"
+                      cachedName="part_no"
+                      externalMetadataColumnId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[part_no]"
+                      lineageId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].Columns[part_no]" />
+                    <inputColumn
+                      refId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[PHPosted]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="1"
+                      cachedName="PHPosted"
+                      externalMetadataColumnId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PHPosted]"
+                      lineageId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].Columns[PHPosted]" />
+                    <inputColumn
+                      refId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[store_id]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="3"
+                      cachedName="store_id"
+                      externalMetadataColumnId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[store_id]"
+                      lineageId="Package\Import labor detail\Data Conversion.Outputs[Data Conversion Output].Columns[store_id]" />
+                    <inputColumn
+                      refId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[ClosedDate]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="10"
+                      cachedName="ClosedDate"
+                      externalMetadataColumnId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[ConvDate]"
+                      lineageId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].Columns[ClosedDate]" />
+                    <inputColumn
+                      refId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[RONumber]"
+                      cachedDataType="i4"
+                      cachedName="RONumber"
+                      externalMetadataColumnId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[control_no]"
+                      lineageId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].Columns[RONumber]" />
+                    <inputColumn
+                      refId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[JobCode]"
+                      cachedDataType="i4"
+                      cachedName="JobCode"
+                      externalMetadataColumnId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[job_code]"
+                      lineageId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].Columns[JobCode]" />
+                    <inputColumn
+                      refId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[Amt]"
+                      cachedDataType="r8"
+                      cachedName="Amt"
+                      externalMetadataColumnId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Amount]"
+                      lineageId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].Columns[Amt]" />
+                    <inputColumn
+                      refId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[tech_no]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="4"
+                      cachedName="tech_no"
+                      externalMetadataColumnId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[tech_code]"
+                      lineageId="Package\Import labor detail\Data Conversion.Outputs[Data Conversion Output].Columns[tech_no]" />
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[control_no]"
+                      dataType="i4"
+                      name="control_no" />
+                    <externalMetadataColumn
+                      refId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[store_id]"
+                      codePage="1252"
+                      dataType="str"
+                      length="3"
+                      name="store_id" />
+                    <externalMetadataColumn
+                      refId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[trans_date]"
+                      dataType="i4"
+                      name="trans_date" />
+                    <externalMetadataColumn
+                      refId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[ConvDate]"
+                      dataType="dbTimeStamp"
+                      name="ConvDate" />
+                    <externalMetadataColumn
+                      refId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[qty]"
+                      dataType="numeric"
+                      name="qty"
+                      precision="11"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[part_grp]"
+                      codePage="1252"
+                      dataType="str"
+                      length="3"
+                      name="part_grp" />
+                    <externalMetadataColumn
+                      refId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[part_mfg]"
+                      codePage="1252"
+                      dataType="str"
+                      length="3"
+                      name="part_mfg" />
+                    <externalMetadataColumn
+                      refId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[part_no]"
+                      codePage="1252"
+                      dataType="str"
+                      length="20"
+                      name="part_no" />
+                    <externalMetadataColumn
+                      refId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[tech_code]"
+                      codePage="1252"
+                      dataType="str"
+                      length="10"
+                      name="tech_code" />
+                    <externalMetadataColumn
+                      refId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[sell]"
+                      dataType="numeric"
+                      name="sell"
+                      precision="11"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[priority]"
+                      codePage="1252"
+                      dataType="str"
+                      length="1"
+                      name="priority" />
+                    <externalMetadataColumn
+                      refId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Amount]"
+                      dataType="numeric"
+                      name="Amount"
+                      precision="23"
+                      scale="4" />
+                    <externalMetadataColumn
+                      refId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PHDrawerDate]"
+                      dataType="i4"
+                      name="PHDrawerDate" />
+                    <externalMetadataColumn
+                      refId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PHPosted]"
+                      codePage="1252"
+                      dataType="str"
+                      length="1"
+                      name="PHPosted" />
+                    <externalMetadataColumn
+                      refId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PHReadyProc]"
+                      codePage="1252"
+                      dataType="str"
+                      length="1"
+                      name="PHReadyProc" />
+                    <externalMetadataColumn
+                      refId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PHInDate]"
+                      dataType="i4"
+                      name="PHInDate" />
+                    <externalMetadataColumn
+                      refId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PHOutDate]"
+                      dataType="i4"
+                      name="PHOutDate" />
+                    <externalMetadataColumn
+                      refId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PHPriority]"
+                      codePage="1252"
+                      dataType="str"
+                      length="1"
+                      name="PHPriority" />
+                    <externalMetadataColumn
+                      refId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PHTech]"
+                      codePage="1252"
+                      dataType="str"
+                      length="10"
+                      name="PHTech" />
+                    <externalMetadataColumn
+                      refId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[totaler1am]"
+                      dataType="numeric"
+                      name="totaler1am"
+                      precision="11"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[totaler2am]"
+                      dataType="numeric"
+                      name="totaler2am"
+                      precision="11"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[totaler3am]"
+                      dataType="numeric"
+                      name="totaler3am"
+                      precision="11"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[totaler4am]"
+                      dataType="numeric"
+                      name="totaler4am"
+                      precision="11"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[totaler5am]"
+                      dataType="numeric"
+                      name="totaler5am"
+                      precision="11"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PHTotal]"
+                      dataType="numeric"
+                      name="PHTotal"
+                      precision="11"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PHOrigDate]"
+                      dataType="i4"
+                      name="PHOrigDate" />
+                    <externalMetadataColumn
+                      refId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[line_id]"
+                      dataType="i4"
+                      name="line_id" />
+                    <externalMetadataColumn
+                      refId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[job_code]"
+                      codePage="1252"
+                      dataType="str"
+                      length="10"
+                      name="job_code" />
+                    <externalMetadataColumn
+                      refId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[descript]"
+                      codePage="1252"
+                      dataType="text"
+                      name="descript" />
+                    <externalMetadataColumn
+                      refId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[warr_code]"
+                      codePage="1252"
+                      dataType="str"
+                      length="1"
+                      name="warr_code" />
+                    <externalMetadataColumn
+                      refId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[LABOR]"
+                      dataType="numeric"
+                      name="LABOR"
+                      precision="11"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PARTS]"
+                      dataType="numeric"
+                      name="PARTS"
+                      precision="11"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[DISCOUNT]"
+                      dataType="numeric"
+                      name="DISCOUNT"
+                      precision="11"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[WARRANTY]"
+                      dataType="numeric"
+                      name="WARRANTY"
+                      precision="11"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[HAZWASTE]"
+                      dataType="numeric"
+                      name="HAZWASTE"
+                      precision="11"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[SHOPSUPP]"
+                      dataType="numeric"
+                      name="SHOPSUPP"
+                      precision="23"
+                      scale="4" />
+                    <externalMetadataColumn
+                      refId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[LABORHOURS]"
+                      dataType="numeric"
+                      name="LABORHOURS"
+                      precision="11"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Employee]"
+                      codePage="1252"
+                      dataType="str"
+                      length="10"
+                      name="Employee" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Import labor detail\OLE DB Destination.Outputs[OLE DB Destination Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="OLE DB Destination Error Output"
+                  synchronousInputId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Import labor detail\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Import labor detail\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Import labor detail\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Import labor detail\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Import labor detail\Shopware Labor"
+              componentClassID="Microsoft.OLEDBSource"
+              contactInfo="OLE DB Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;7"
+              description="OLE DB Source"
+              name="Shopware Labor"
+              usesDispositions="true"
+              version="7">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">[dbo].[vw_DailySalesDetailLabor]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                <property
+                  dataType="System.String"
+                  description="The variable that contains the SQL command to be executed."
+                  name="SqlCommandVariable"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">0</property>
+                <property
+                  dataType="System.String"
+                  description="The mappings between the parameters in the SQL command and variables."
+                  name="ParameterMapping"></property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Import labor detail\Shopware Labor.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[brakesql.Shopware]"
+                  connectionManagerRefId="Package.ConnectionManagers[brakesql.Shopware]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <outputs>
+                <output
+                  refId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output]"
+                  name="OLE DB Source Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].Columns[shop_id]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].ExternalColumns[shop_id]"
+                      length="48"
+                      lineageId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].Columns[shop_id]"
+                      name="shop_id"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].Columns[ClosedDate]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].ExternalColumns[ClosedDate]"
+                      length="10"
+                      lineageId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].Columns[ClosedDate]"
+                      name="ClosedDate"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].Columns[trans_date]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].ExternalColumns[trans_date]"
+                      lineageId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].Columns[trans_date]"
+                      name="trans_date"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].Columns[PHDrawerDate]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].ExternalColumns[PHDrawerDate]"
+                      lineageId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].Columns[PHDrawerDate]"
+                      name="PHDrawerDate"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].Columns[RONumber]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].ExternalColumns[RONumber]"
+                      lineageId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].Columns[RONumber]"
+                      name="RONumber"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].Columns[TechCode]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].ExternalColumns[TechCode]"
+                      length="4"
+                      lineageId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].Columns[TechCode]"
+                      name="TechCode"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].Columns[technician_id]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].ExternalColumns[technician_id]"
+                      lineageId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].Columns[technician_id]"
+                      name="technician_id"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].Columns[Desc]"
+                      dataType="nText"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].ExternalColumns[Desc]"
+                      lineageId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].Columns[Desc]"
+                      name="Desc"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].Columns[qty]"
+                      dataType="r8"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].ExternalColumns[qty]"
+                      lineageId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].Columns[qty]"
+                      name="qty"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].Columns[JobCode]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].ExternalColumns[JobCode]"
+                      lineageId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].Columns[JobCode]"
+                      name="JobCode"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].Columns[priority]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].ExternalColumns[priority]"
+                      length="1"
+                      lineageId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].Columns[priority]"
+                      name="priority"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].Columns[sell]"
+                      dataType="numeric"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].ExternalColumns[sell]"
+                      lineageId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].Columns[sell]"
+                      name="sell"
+                      precision="18"
+                      scale="6"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].Columns[Amt]"
+                      dataType="r8"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].ExternalColumns[Amt]"
+                      lineageId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].Columns[Amt]"
+                      name="Amt"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].Columns[part_mfg]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].ExternalColumns[part_mfg]"
+                      length="3"
+                      lineageId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].Columns[part_mfg]"
+                      name="part_mfg"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].Columns[part_no]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].ExternalColumns[part_no]"
+                      length="5"
+                      lineageId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].Columns[part_no]"
+                      name="part_no"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].Columns[PHPosted]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].ExternalColumns[PHPosted]"
+                      length="1"
+                      lineageId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].Columns[PHPosted]"
+                      name="PHPosted"
+                      truncationRowDisposition="FailComponent" />
+                  </outputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].ExternalColumns[shop_id]"
+                      dataType="wstr"
+                      length="48"
+                      name="shop_id" />
+                    <externalMetadataColumn
+                      refId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].ExternalColumns[ClosedDate]"
+                      codePage="1252"
+                      dataType="str"
+                      length="10"
+                      name="ClosedDate" />
+                    <externalMetadataColumn
+                      refId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].ExternalColumns[trans_date]"
+                      dataType="i4"
+                      name="trans_date" />
+                    <externalMetadataColumn
+                      refId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].ExternalColumns[PHDrawerDate]"
+                      dataType="i4"
+                      name="PHDrawerDate" />
+                    <externalMetadataColumn
+                      refId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].ExternalColumns[RONumber]"
+                      dataType="i4"
+                      name="RONumber" />
+                    <externalMetadataColumn
+                      refId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].ExternalColumns[TechCode]"
+                      dataType="wstr"
+                      length="4"
+                      name="TechCode" />
+                    <externalMetadataColumn
+                      refId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].ExternalColumns[technician_id]"
+                      dataType="i4"
+                      name="technician_id" />
+                    <externalMetadataColumn
+                      refId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].ExternalColumns[Desc]"
+                      dataType="nText"
+                      name="Desc" />
+                    <externalMetadataColumn
+                      refId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].ExternalColumns[qty]"
+                      dataType="r8"
+                      name="qty" />
+                    <externalMetadataColumn
+                      refId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].ExternalColumns[JobCode]"
+                      dataType="i4"
+                      name="JobCode" />
+                    <externalMetadataColumn
+                      refId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].ExternalColumns[priority]"
+                      codePage="1252"
+                      dataType="str"
+                      length="1"
+                      name="priority" />
+                    <externalMetadataColumn
+                      refId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].ExternalColumns[sell]"
+                      dataType="numeric"
+                      name="sell"
+                      precision="18"
+                      scale="6" />
+                    <externalMetadataColumn
+                      refId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].ExternalColumns[Amt]"
+                      dataType="r8"
+                      name="Amt" />
+                    <externalMetadataColumn
+                      refId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].ExternalColumns[part_mfg]"
+                      codePage="1252"
+                      dataType="str"
+                      length="3"
+                      name="part_mfg" />
+                    <externalMetadataColumn
+                      refId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].ExternalColumns[part_no]"
+                      codePage="1252"
+                      dataType="str"
+                      length="5"
+                      name="part_no" />
+                    <externalMetadataColumn
+                      refId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output].ExternalColumns[PHPosted]"
+                      codePage="1252"
+                      dataType="str"
+                      length="1"
+                      name="PHPosted" />
+                  </externalMetadataColumns>
+                </output>
+                <output
+                  refId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Error Output]"
+                  isErrorOut="true"
+                  name="OLE DB Source Error Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Error Output].Columns[shop_id]"
+                      dataType="wstr"
+                      length="48"
+                      lineageId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Error Output].Columns[shop_id]"
+                      name="shop_id" />
+                    <outputColumn
+                      refId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Error Output].Columns[ClosedDate]"
+                      codePage="1252"
+                      dataType="str"
+                      length="10"
+                      lineageId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Error Output].Columns[ClosedDate]"
+                      name="ClosedDate" />
+                    <outputColumn
+                      refId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Error Output].Columns[trans_date]"
+                      dataType="i4"
+                      lineageId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Error Output].Columns[trans_date]"
+                      name="trans_date" />
+                    <outputColumn
+                      refId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Error Output].Columns[PHDrawerDate]"
+                      dataType="i4"
+                      lineageId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Error Output].Columns[PHDrawerDate]"
+                      name="PHDrawerDate" />
+                    <outputColumn
+                      refId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Error Output].Columns[RONumber]"
+                      dataType="i4"
+                      lineageId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Error Output].Columns[RONumber]"
+                      name="RONumber" />
+                    <outputColumn
+                      refId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Error Output].Columns[TechCode]"
+                      dataType="wstr"
+                      length="4"
+                      lineageId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Error Output].Columns[TechCode]"
+                      name="TechCode" />
+                    <outputColumn
+                      refId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Error Output].Columns[technician_id]"
+                      dataType="i4"
+                      lineageId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Error Output].Columns[technician_id]"
+                      name="technician_id" />
+                    <outputColumn
+                      refId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Error Output].Columns[Desc]"
+                      dataType="nText"
+                      lineageId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Error Output].Columns[Desc]"
+                      name="Desc" />
+                    <outputColumn
+                      refId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Error Output].Columns[qty]"
+                      dataType="r8"
+                      lineageId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Error Output].Columns[qty]"
+                      name="qty" />
+                    <outputColumn
+                      refId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Error Output].Columns[JobCode]"
+                      dataType="i4"
+                      lineageId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Error Output].Columns[JobCode]"
+                      name="JobCode" />
+                    <outputColumn
+                      refId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Error Output].Columns[priority]"
+                      codePage="1252"
+                      dataType="str"
+                      length="1"
+                      lineageId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Error Output].Columns[priority]"
+                      name="priority" />
+                    <outputColumn
+                      refId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Error Output].Columns[sell]"
+                      dataType="numeric"
+                      lineageId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Error Output].Columns[sell]"
+                      name="sell"
+                      precision="18"
+                      scale="6" />
+                    <outputColumn
+                      refId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Error Output].Columns[Amt]"
+                      dataType="r8"
+                      lineageId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Error Output].Columns[Amt]"
+                      name="Amt" />
+                    <outputColumn
+                      refId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Error Output].Columns[part_mfg]"
+                      codePage="1252"
+                      dataType="str"
+                      length="3"
+                      lineageId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Error Output].Columns[part_mfg]"
+                      name="part_mfg" />
+                    <outputColumn
+                      refId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Error Output].Columns[part_no]"
+                      codePage="1252"
+                      dataType="str"
+                      length="5"
+                      lineageId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Error Output].Columns[part_no]"
+                      name="part_no" />
+                    <outputColumn
+                      refId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Error Output].Columns[PHPosted]"
+                      codePage="1252"
+                      dataType="str"
+                      length="1"
+                      lineageId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Error Output].Columns[PHPosted]"
+                      name="PHPosted" />
+                    <outputColumn
+                      refId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path
+              refId="Package\Import labor detail.Paths[Data Conversion Output]"
+              endId="Package\Import labor detail\OLE DB Destination.Inputs[OLE DB Destination Input]"
+              name="Data Conversion Output"
+              startId="Package\Import labor detail\Data Conversion.Outputs[Data Conversion Output]" />
+            <path
+              refId="Package\Import labor detail.Paths[OLE DB Source Output]"
+              endId="Package\Import labor detail\Data Conversion.Inputs[Data Conversion Input]"
+              name="OLE DB Source Output"
+              startId="Package\Import labor detail\Shopware Labor.Outputs[OLE DB Source Output]" />
+          </paths>
+        </pipeline>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Import part detail"
+      DTS:CreationName="Microsoft.Pipeline"
+      DTS:Description="Data Flow Task"
+      DTS:DTSID="{64A04E0A-2504-4984-88A4-9CC6112E526C}"
+      DTS:ExecutableType="Microsoft.Pipeline"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Import part detail"
+      DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <pipeline
+          version="1">
+          <components>
+            <component
+              refId="Package\Import part detail\Data Conversion"
+              componentClassID="Microsoft.DataConvert"
+              contactInfo="Data Conversion;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;0"
+              description="Data Conversion"
+              name="Data Conversion"
+              usesDispositions="true">
+              <inputs>
+                <input
+                  refId="Package\Import part detail\Data Conversion.Inputs[Data Conversion Input]"
+                  name="Data Conversion Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Import part detail\Data Conversion.Inputs[Data Conversion Input].Columns[shop_id]"
+                      cachedDataType="wstr"
+                      cachedLength="48"
+                      cachedName="shop_id"
+                      lineageId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].Columns[shop_id]" />
+                    <inputColumn
+                      refId="Package\Import part detail\Data Conversion.Inputs[Data Conversion Input].Columns[Part#]"
+                      cachedDataType="wstr"
+                      cachedLength="80"
+                      cachedName="Part#"
+                      lineageId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].Columns[Part#]" />
+                    <inputColumn
+                      refId="Package\Import part detail\Data Conversion.Inputs[Data Conversion Input].Columns[description]"
+                      cachedDataType="wstr"
+                      cachedLength="1500"
+                      cachedName="description"
+                      lineageId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].Columns[description]" />
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Import part detail\Data Conversion.Outputs[Data Conversion Output]"
+                  exclusionGroup="1"
+                  name="Data Conversion Output"
+                  synchronousInputId="Package\Import part detail\Data Conversion.Inputs[Data Conversion Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Import part detail\Data Conversion.Outputs[Data Conversion Output].Columns[store_id]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      length="3"
+                      lineageId="Package\Import part detail\Data Conversion.Outputs[Data Conversion Output].Columns[store_id]"
+                      name="store_id"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Specifies the input column used as the source of data for the conversion."
+                          name="SourceInputColumnLineageID">#{Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].Columns[shop_id]}</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                          name="FastParse">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Import part detail\Data Conversion.Outputs[Data Conversion Output].Columns[part_no]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      length="20"
+                      lineageId="Package\Import part detail\Data Conversion.Outputs[Data Conversion Output].Columns[part_no]"
+                      name="part_no"
+                      truncationRowDisposition="IgnoreFailure">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Specifies the input column used as the source of data for the conversion."
+                          name="SourceInputColumnLineageID">#{Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].Columns[Part#]}</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                          name="FastParse">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Import part detail\Data Conversion.Outputs[Data Conversion Output].Columns[descript]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      length="1500"
+                      lineageId="Package\Import part detail\Data Conversion.Outputs[Data Conversion Output].Columns[descript]"
+                      name="descript"
+                      truncationRowDisposition="IgnoreFailure">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Specifies the input column used as the source of data for the conversion."
+                          name="SourceInputColumnLineageID">#{Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].Columns[description]}</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                          name="FastParse">false</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Import part detail\Data Conversion.Outputs[Data Conversion Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Data Conversion Error Output"
+                  synchronousInputId="Package\Import part detail\Data Conversion.Inputs[Data Conversion Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Import part detail\Data Conversion.Outputs[Data Conversion Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Import part detail\Data Conversion.Outputs[Data Conversion Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Import part detail\Data Conversion.Outputs[Data Conversion Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Import part detail\Data Conversion.Outputs[Data Conversion Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Import part detail\OLE DB Destination"
+              componentClassID="Microsoft.OLEDBDestination"
+              contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
+              description="OLE DB Destination"
+              name="OLE DB Destination"
+              usesDispositions="true"
+              version="4">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">[dbo].[tblDailySalesDetail]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">3</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepIdentity">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the columns containing null will have null inserted in the destination. If false, columns containing null will have their default values inserted at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepNulls">false</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies options to be used with fast load.  Applies only if fast load is turned on."
+                  name="FastLoadOptions">TABLOCK,CHECK_CONSTRAINTS</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion.  Applies only if fast load is turned on."
+                  name="FastLoadMaxInsertCommitSize">2147483647</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Import part detail\OLE DB Destination.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[brakesql.Middleware]"
+                  connectionManagerRefId="Package.ConnectionManagers[brakesql.Middleware]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input]"
+                  errorOrTruncationOperation="Insert"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="OLE DB Destination Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[sell]"
+                      cachedDataType="numeric"
+                      cachedName="sell"
+                      cachedPrecision="18"
+                      cachedScale="6"
+                      externalMetadataColumnId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[sell]"
+                      lineageId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].Columns[sell]" />
+                    <inputColumn
+                      refId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[Amount]"
+                      cachedDataType="r8"
+                      cachedName="Amount"
+                      externalMetadataColumnId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Amount]"
+                      lineageId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].Columns[Amount]" />
+                    <inputColumn
+                      refId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[priority]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="1"
+                      cachedName="priority"
+                      externalMetadataColumnId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[priority]"
+                      lineageId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].Columns[priority]" />
+                    <inputColumn
+                      refId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[trans_date]"
+                      cachedDataType="i4"
+                      cachedName="trans_date"
+                      externalMetadataColumnId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[trans_date]"
+                      lineageId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].Columns[trans_date]" />
+                    <inputColumn
+                      refId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[PHDrawerDate]"
+                      cachedDataType="i4"
+                      cachedName="PHDrawerDate"
+                      externalMetadataColumnId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PHDrawerDate]"
+                      lineageId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].Columns[PHDrawerDate]" />
+                    <inputColumn
+                      refId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[PHPosted]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="1"
+                      cachedName="PHPosted"
+                      externalMetadataColumnId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PHPosted]"
+                      lineageId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].Columns[PHPosted]" />
+                    <inputColumn
+                      refId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[store_id]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="3"
+                      cachedName="store_id"
+                      externalMetadataColumnId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[store_id]"
+                      lineageId="Package\Import part detail\Data Conversion.Outputs[Data Conversion Output].Columns[store_id]" />
+                    <inputColumn
+                      refId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[part_no]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="20"
+                      cachedName="part_no"
+                      externalMetadataColumnId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[part_no]"
+                      lineageId="Package\Import part detail\Data Conversion.Outputs[Data Conversion Output].Columns[part_no]" />
+                    <inputColumn
+                      refId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[ClosedDate]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="10"
+                      cachedName="ClosedDate"
+                      externalMetadataColumnId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[ConvDate]"
+                      lineageId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].Columns[ClosedDate]" />
+                    <inputColumn
+                      refId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[RONumber]"
+                      cachedDataType="i4"
+                      cachedName="RONumber"
+                      externalMetadataColumnId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[control_no]"
+                      lineageId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].Columns[RONumber]" />
+                    <inputColumn
+                      refId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[JobCode]"
+                      cachedDataType="i4"
+                      cachedName="JobCode"
+                      externalMetadataColumnId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[job_code]"
+                      lineageId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].Columns[JobCode]" />
+                    <inputColumn
+                      refId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[quantity]"
+                      cachedDataType="r8"
+                      cachedName="quantity"
+                      externalMetadataColumnId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[qty]"
+                      lineageId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].Columns[quantity]" />
+                    <inputColumn
+                      refId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[descript]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="1500"
+                      cachedName="descript"
+                      externalMetadataColumnId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[descript]"
+                      lineageId="Package\Import part detail\Data Conversion.Outputs[Data Conversion Output].Columns[descript]" />
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[control_no]"
+                      dataType="i4"
+                      name="control_no" />
+                    <externalMetadataColumn
+                      refId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[store_id]"
+                      codePage="1252"
+                      dataType="str"
+                      length="3"
+                      name="store_id" />
+                    <externalMetadataColumn
+                      refId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[trans_date]"
+                      dataType="i4"
+                      name="trans_date" />
+                    <externalMetadataColumn
+                      refId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[ConvDate]"
+                      dataType="dbTimeStamp"
+                      name="ConvDate" />
+                    <externalMetadataColumn
+                      refId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[qty]"
+                      dataType="numeric"
+                      name="qty"
+                      precision="11"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[part_grp]"
+                      codePage="1252"
+                      dataType="str"
+                      length="3"
+                      name="part_grp" />
+                    <externalMetadataColumn
+                      refId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[part_mfg]"
+                      codePage="1252"
+                      dataType="str"
+                      length="3"
+                      name="part_mfg" />
+                    <externalMetadataColumn
+                      refId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[part_no]"
+                      codePage="1252"
+                      dataType="str"
+                      length="20"
+                      name="part_no" />
+                    <externalMetadataColumn
+                      refId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[tech_code]"
+                      codePage="1252"
+                      dataType="str"
+                      length="10"
+                      name="tech_code" />
+                    <externalMetadataColumn
+                      refId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[sell]"
+                      dataType="numeric"
+                      name="sell"
+                      precision="11"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[priority]"
+                      codePage="1252"
+                      dataType="str"
+                      length="1"
+                      name="priority" />
+                    <externalMetadataColumn
+                      refId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Amount]"
+                      dataType="numeric"
+                      name="Amount"
+                      precision="23"
+                      scale="4" />
+                    <externalMetadataColumn
+                      refId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PHDrawerDate]"
+                      dataType="i4"
+                      name="PHDrawerDate" />
+                    <externalMetadataColumn
+                      refId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PHPosted]"
+                      codePage="1252"
+                      dataType="str"
+                      length="1"
+                      name="PHPosted" />
+                    <externalMetadataColumn
+                      refId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PHReadyProc]"
+                      codePage="1252"
+                      dataType="str"
+                      length="1"
+                      name="PHReadyProc" />
+                    <externalMetadataColumn
+                      refId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PHInDate]"
+                      dataType="i4"
+                      name="PHInDate" />
+                    <externalMetadataColumn
+                      refId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PHOutDate]"
+                      dataType="i4"
+                      name="PHOutDate" />
+                    <externalMetadataColumn
+                      refId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PHPriority]"
+                      codePage="1252"
+                      dataType="str"
+                      length="1"
+                      name="PHPriority" />
+                    <externalMetadataColumn
+                      refId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PHTech]"
+                      codePage="1252"
+                      dataType="str"
+                      length="10"
+                      name="PHTech" />
+                    <externalMetadataColumn
+                      refId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[totaler1am]"
+                      dataType="numeric"
+                      name="totaler1am"
+                      precision="11"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[totaler2am]"
+                      dataType="numeric"
+                      name="totaler2am"
+                      precision="11"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[totaler3am]"
+                      dataType="numeric"
+                      name="totaler3am"
+                      precision="11"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[totaler4am]"
+                      dataType="numeric"
+                      name="totaler4am"
+                      precision="11"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[totaler5am]"
+                      dataType="numeric"
+                      name="totaler5am"
+                      precision="11"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PHTotal]"
+                      dataType="numeric"
+                      name="PHTotal"
+                      precision="11"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PHOrigDate]"
+                      dataType="i4"
+                      name="PHOrigDate" />
+                    <externalMetadataColumn
+                      refId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[line_id]"
+                      dataType="i4"
+                      name="line_id" />
+                    <externalMetadataColumn
+                      refId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[job_code]"
+                      codePage="1252"
+                      dataType="str"
+                      length="10"
+                      name="job_code" />
+                    <externalMetadataColumn
+                      refId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[descript]"
+                      codePage="1252"
+                      dataType="text"
+                      name="descript" />
+                    <externalMetadataColumn
+                      refId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[warr_code]"
+                      codePage="1252"
+                      dataType="str"
+                      length="1"
+                      name="warr_code" />
+                    <externalMetadataColumn
+                      refId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[LABOR]"
+                      dataType="numeric"
+                      name="LABOR"
+                      precision="11"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PARTS]"
+                      dataType="numeric"
+                      name="PARTS"
+                      precision="11"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[DISCOUNT]"
+                      dataType="numeric"
+                      name="DISCOUNT"
+                      precision="11"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[WARRANTY]"
+                      dataType="numeric"
+                      name="WARRANTY"
+                      precision="11"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[HAZWASTE]"
+                      dataType="numeric"
+                      name="HAZWASTE"
+                      precision="11"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[SHOPSUPP]"
+                      dataType="numeric"
+                      name="SHOPSUPP"
+                      precision="23"
+                      scale="4" />
+                    <externalMetadataColumn
+                      refId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[LABORHOURS]"
+                      dataType="numeric"
+                      name="LABORHOURS"
+                      precision="11"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Employee]"
+                      codePage="1252"
+                      dataType="str"
+                      length="10"
+                      name="Employee" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Import part detail\OLE DB Destination.Outputs[OLE DB Destination Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="OLE DB Destination Error Output"
+                  synchronousInputId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Import part detail\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Import part detail\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Import part detail\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Import part detail\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Import part detail\Shopware parts"
+              componentClassID="Microsoft.OLEDBSource"
+              contactInfo="OLE DB Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;7"
+              description="OLE DB Source"
+              name="Shopware parts"
+              usesDispositions="true"
+              version="7">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">[dbo].[vw_DailySalesDetailParts]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                <property
+                  dataType="System.String"
+                  description="The variable that contains the SQL command to be executed."
+                  name="SqlCommandVariable"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">0</property>
+                <property
+                  dataType="System.String"
+                  description="The mappings between the parameters in the SQL command and variables."
+                  name="ParameterMapping"></property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Import part detail\Shopware parts.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[brakesql.Shopware]"
+                  connectionManagerRefId="Package.ConnectionManagers[brakesql.Shopware]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <outputs>
+                <output
+                  refId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output]"
+                  name="OLE DB Source Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].Columns[shop_id]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].ExternalColumns[shop_id]"
+                      length="48"
+                      lineageId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].Columns[shop_id]"
+                      name="shop_id"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].Columns[ClosedDate]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].ExternalColumns[ClosedDate]"
+                      length="10"
+                      lineageId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].Columns[ClosedDate]"
+                      name="ClosedDate"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].Columns[RONumber]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].ExternalColumns[RONumber]"
+                      lineageId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].Columns[RONumber]"
+                      name="RONumber"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].Columns[JobCode]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].ExternalColumns[JobCode]"
+                      lineageId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].Columns[JobCode]"
+                      name="JobCode"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].Columns[Part#]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].ExternalColumns[Part#]"
+                      length="80"
+                      lineageId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].Columns[Part#]"
+                      name="Part#"
+                      truncationRowDisposition="IgnoreFailure" />
+                    <outputColumn
+                      refId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].Columns[quantity]"
+                      dataType="r8"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].ExternalColumns[quantity]"
+                      lineageId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].Columns[quantity]"
+                      name="quantity"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].Columns[sell]"
+                      dataType="numeric"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].ExternalColumns[sell]"
+                      lineageId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].Columns[sell]"
+                      name="sell"
+                      precision="18"
+                      scale="6"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].Columns[Amount]"
+                      dataType="r8"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].ExternalColumns[Amount]"
+                      lineageId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].Columns[Amount]"
+                      name="Amount"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].Columns[priority]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].ExternalColumns[priority]"
+                      length="1"
+                      lineageId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].Columns[priority]"
+                      name="priority"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].Columns[trans_date]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].ExternalColumns[trans_date]"
+                      lineageId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].Columns[trans_date]"
+                      name="trans_date"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].Columns[PHDrawerDate]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].ExternalColumns[PHDrawerDate]"
+                      lineageId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].Columns[PHDrawerDate]"
+                      name="PHDrawerDate"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].Columns[PHPosted]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].ExternalColumns[PHPosted]"
+                      length="1"
+                      lineageId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].Columns[PHPosted]"
+                      name="PHPosted"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].Columns[description]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].ExternalColumns[description]"
+                      length="1500"
+                      lineageId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].Columns[description]"
+                      name="description"
+                      truncationRowDisposition="IgnoreFailure" />
+                  </outputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].ExternalColumns[shop_id]"
+                      dataType="wstr"
+                      length="48"
+                      name="shop_id" />
+                    <externalMetadataColumn
+                      refId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].ExternalColumns[ClosedDate]"
+                      codePage="1252"
+                      dataType="str"
+                      length="10"
+                      name="ClosedDate" />
+                    <externalMetadataColumn
+                      refId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].ExternalColumns[RONumber]"
+                      dataType="i4"
+                      name="RONumber" />
+                    <externalMetadataColumn
+                      refId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].ExternalColumns[JobCode]"
+                      dataType="i4"
+                      name="JobCode" />
+                    <externalMetadataColumn
+                      refId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].ExternalColumns[Part#]"
+                      dataType="wstr"
+                      length="80"
+                      name="Part#" />
+                    <externalMetadataColumn
+                      refId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].ExternalColumns[quantity]"
+                      dataType="r8"
+                      name="quantity" />
+                    <externalMetadataColumn
+                      refId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].ExternalColumns[sell]"
+                      dataType="numeric"
+                      name="sell"
+                      precision="18"
+                      scale="6" />
+                    <externalMetadataColumn
+                      refId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].ExternalColumns[Amount]"
+                      dataType="r8"
+                      name="Amount" />
+                    <externalMetadataColumn
+                      refId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].ExternalColumns[priority]"
+                      codePage="1252"
+                      dataType="str"
+                      length="1"
+                      name="priority" />
+                    <externalMetadataColumn
+                      refId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].ExternalColumns[trans_date]"
+                      dataType="i4"
+                      name="trans_date" />
+                    <externalMetadataColumn
+                      refId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].ExternalColumns[PHDrawerDate]"
+                      dataType="i4"
+                      name="PHDrawerDate" />
+                    <externalMetadataColumn
+                      refId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].ExternalColumns[PHPosted]"
+                      codePage="1252"
+                      dataType="str"
+                      length="1"
+                      name="PHPosted" />
+                    <externalMetadataColumn
+                      refId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output].ExternalColumns[description]"
+                      dataType="wstr"
+                      length="1500"
+                      name="description" />
+                  </externalMetadataColumns>
+                </output>
+                <output
+                  refId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Error Output]"
+                  isErrorOut="true"
+                  name="OLE DB Source Error Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Error Output].Columns[shop_id]"
+                      dataType="wstr"
+                      length="48"
+                      lineageId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Error Output].Columns[shop_id]"
+                      name="shop_id" />
+                    <outputColumn
+                      refId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Error Output].Columns[ClosedDate]"
+                      codePage="1252"
+                      dataType="str"
+                      length="10"
+                      lineageId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Error Output].Columns[ClosedDate]"
+                      name="ClosedDate" />
+                    <outputColumn
+                      refId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Error Output].Columns[trans_date]"
+                      dataType="i4"
+                      lineageId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Error Output].Columns[trans_date]"
+                      name="trans_date" />
+                    <outputColumn
+                      refId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Error Output].Columns[PHDrawerDate]"
+                      dataType="i4"
+                      lineageId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Error Output].Columns[PHDrawerDate]"
+                      name="PHDrawerDate" />
+                    <outputColumn
+                      refId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Error Output].Columns[RONumber]"
+                      dataType="i4"
+                      lineageId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Error Output].Columns[RONumber]"
+                      name="RONumber" />
+                    <outputColumn
+                      refId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Error Output].Columns[JobCode]"
+                      dataType="i4"
+                      lineageId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Error Output].Columns[JobCode]"
+                      name="JobCode" />
+                    <outputColumn
+                      refId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Error Output].Columns[Part#]"
+                      dataType="wstr"
+                      length="80"
+                      lineageId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Error Output].Columns[Part#]"
+                      name="Part#" />
+                    <outputColumn
+                      refId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Error Output].Columns[quantity]"
+                      dataType="r8"
+                      lineageId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Error Output].Columns[quantity]"
+                      name="quantity" />
+                    <outputColumn
+                      refId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Error Output].Columns[sell]"
+                      dataType="numeric"
+                      lineageId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Error Output].Columns[sell]"
+                      name="sell"
+                      precision="18"
+                      scale="6" />
+                    <outputColumn
+                      refId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Error Output].Columns[Amount]"
+                      dataType="r8"
+                      lineageId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Error Output].Columns[Amount]"
+                      name="Amount" />
+                    <outputColumn
+                      refId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Error Output].Columns[priority]"
+                      codePage="1252"
+                      dataType="str"
+                      length="1"
+                      lineageId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Error Output].Columns[priority]"
+                      name="priority" />
+                    <outputColumn
+                      refId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Error Output].Columns[PHPosted]"
+                      codePage="1252"
+                      dataType="str"
+                      length="1"
+                      lineageId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Error Output].Columns[PHPosted]"
+                      name="PHPosted" />
+                    <outputColumn
+                      refId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Error Output].Columns[description]"
+                      dataType="wstr"
+                      length="1500"
+                      lineageId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Error Output].Columns[description]"
+                      name="description" />
+                    <outputColumn
+                      refId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path
+              refId="Package\Import part detail.Paths[Data Conversion Output]"
+              endId="Package\Import part detail\OLE DB Destination.Inputs[OLE DB Destination Input]"
+              name="Data Conversion Output"
+              startId="Package\Import part detail\Data Conversion.Outputs[Data Conversion Output]" />
+            <path
+              refId="Package\Import part detail.Paths[OLE DB Source Output]"
+              endId="Package\Import part detail\Data Conversion.Inputs[Data Conversion Input]"
+              name="OLE DB Source Output"
+              startId="Package\Import part detail\Shopware parts.Outputs[OLE DB Source Output]" />
+          </paths>
+        </pipeline>
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:PrecedenceConstraints>
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint]"
+      DTS:CreationName=""
+      DTS:DTSID="{144D3D61-682E-4256-9333-10ED8A468A5E}"
+      DTS:From="Package\Import part detail"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint"
+      DTS:To="Package\Import labor detail" />
+  </DTS:PrecedenceConstraints>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="167,42"
+          Id="Package\Import labor detail"
+          TopLeft="251,155" />
+        <NodeLayout
+          Size="161,42"
+          Id="Package\Import part detail"
+          TopLeft="158,58" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint]"
+          TopLeft="238.5,100">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="96,55"
+              Start="0,0"
+              End="96,47.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,23.5" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,23.5"
+                    Point2="0,27.5"
+                    Point3="4,27.5" />
+                  <mssgle:LineSegment
+                    End="92,27.5" />
+                  <mssgle:CubicBezierSegment
+                    Point1="92,27.5"
+                    Point2="96,27.5"
+                    Point3="96,31.5" />
+                  <mssgle:LineSegment
+                    End="96,47.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+  <TaskHost
+    design-time-name="Package\Import labor detail">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="8" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="177,42"
+          Id="Package\Import labor detail\OLE DB Destination"
+          TopLeft="251,187" />
+        <NodeLayout
+          Size="161,42"
+          Id="Package\Import labor detail\Data Conversion"
+          TopLeft="491,99" />
+        <NodeLayout
+          Size="160,42"
+          Id="Package\Import labor detail\Shopware Labor"
+          TopLeft="178,40" />
+        <EdgeLayout
+          Id="Package\Import labor detail.Paths[Data Conversion Output]"
+          TopLeft="571.5,141">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-232,46"
+              Start="0,0"
+              End="-232,38.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,19" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,19"
+                    Point2="0,23"
+                    Point3="-4,23" />
+                  <mssgle:LineSegment
+                    End="-228,23" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-228,23"
+                    Point2="-232,23"
+                    Point3="-232,27" />
+                  <mssgle:LineSegment
+                    End="-232,38.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Import labor detail.Paths[OLE DB Source Output]"
+          TopLeft="338,61">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="153,59"
+              Start="0,0"
+              End="145.5,59">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="72.5,0" />
+                  <mssgle:CubicBezierSegment
+                    Point1="72.5,0"
+                    Point2="76.5,0"
+                    Point3="76.5,4" />
+                  <mssgle:LineSegment
+                    End="76.5,55" />
+                  <mssgle:CubicBezierSegment
+                    Point1="76.5,55"
+                    Point2="76.5,59"
+                    Point3="80.5,59" />
+                  <mssgle:LineSegment
+                    End="145.5,59" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Import labor detail\OLE DB Destination">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\Import labor detail\Shopware Labor">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">View</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <TaskHost
+    design-time-name="Package\Import part detail">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="8" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="177,42"
+          Id="Package\Import part detail\OLE DB Destination"
+          TopLeft="225,169" />
+        <NodeLayout
+          Size="156,42"
+          Id="Package\Import part detail\Shopware parts"
+          TopLeft="83,54" />
+        <NodeLayout
+          Size="161,42"
+          Id="Package\Import part detail\Data Conversion"
+          TopLeft="519,118" />
+        <EdgeLayout
+          Id="Package\Import part detail.Paths[OLE DB Source Output]"
+          TopLeft="239,75">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="280,58.3333333333333"
+              Start="0,0"
+              End="272.5,58.3333333333333">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="157.834862385321,0" />
+                  <mssgle:CubicBezierSegment
+                    Point1="157.834862385321,0"
+                    Point2="161.834862385321,0"
+                    Point3="161.834862385321,4" />
+                  <mssgle:LineSegment
+                    End="161.834862385321,54.3333333333333" />
+                  <mssgle:CubicBezierSegment
+                    Point1="161.834862385321,54.3333333333333"
+                    Point2="161.834862385321,58.3333333333333"
+                    Point3="165.834862385321,58.3333333333333" />
+                  <mssgle:LineSegment
+                    End="272.5,58.3333333333333" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Import part detail.Paths[Data Conversion Output]"
+          TopLeft="519,144.666666666667">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-117,45.3333333333333"
+              Start="0,0"
+              End="-109.5,45.3333333333333">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="-45.3761467889908,0" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-45.3761467889908,0"
+                    Point2="-49.3761467889908,0"
+                    Point3="-49.3761467889908,4" />
+                  <mssgle:LineSegment
+                    End="-49.3761467889908,41.3333333333333" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-49.3761467889908,41.3333333333333"
+                    Point2="-49.3761467889908,45.3333333333333"
+                    Point3="-53.3761467889908,45.3333333333333" />
+                  <mssgle:LineSegment
+                    End="-109.5,45.3333333333333" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Import part detail\OLE DB Destination">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\Import part detail\Shopware parts">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">View</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>

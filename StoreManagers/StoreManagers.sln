@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31410.357
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{159641D6-6404-4A2A-AE62-294DE0FE8301}") = "StoreManagers", "StoreManagers.dtproj", "{95A39DC2-5EA5-4E64-8384-D42E15ADD98E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Development|Default = Development|Default
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{95A39DC2-5EA5-4E64-8384-D42E15ADD98E}.Development|Default.ActiveCfg = Development
+		{95A39DC2-5EA5-4E64-8384-D42E15ADD98E}.Development|Default.Build.0 = Development
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D407CB92-DFB9-4A6C-AB1F-9961C543D28B}
+	EndGlobalSection
+EndGlobal

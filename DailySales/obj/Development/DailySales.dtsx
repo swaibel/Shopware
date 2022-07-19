@@ -1,0 +1,1137 @@
+<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="5/26/2021 1:34:08 PM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="BMASTPC40"
+  DTS:CreatorName="BRAKE_NT\Steve.Waibel"
+  DTS:DTSID="{E636EC4E-D39C-4FD7-A8DF-66761B0AB6DE}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="15.0.2000.157"
+  DTS:LocaleID="1033"
+  DTS:ObjectName="Package"
+  DTS:PackageType="5"
+  DTS:VersionBuild="73"
+  DTS:VersionGUID="{C4CB6859-FD62-4040-AE7C-903986C84EA7}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[brakesql.Middleware]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{19F7DAFA-4BB4-4796-9EE5-62387F00C3C4}"
+      DTS:ObjectName="brakesql.Middleware">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectionString="Data Source=brakesql;Initial Catalog=Middleware;Provider=SQLNCLI11.1;Integrated Security=SSPI;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[brakesql.Shopware]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{70B00996-976E-4CED-8497-F1185E357765}"
+      DTS:ObjectName="brakesql.Shopware">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectionString="Data Source=brakesql;Initial Catalog=Shopware;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:Variables />
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\Build Shopware Daily Sales"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{D63EE120-CB14-4A30-A93D-80F555072F98}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Build Shopware Daily Sales"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{70B00996-976E-4CED-8497-F1185E357765}"
+          SQLTask:BypassPrepare="False"
+          SQLTask:SqlStatementSource="/****** Build the DailySales Table ******/&#xA;/* Purge table for testing*/&#xA;Use Shopware&#xA;truncate table dailysales&#xA;/* Insert the sales data */&#xA;Use Shopware&#xA;INSERT INTO [dbo].[DailySales] ([Store_id],[DrawerDate],[Parts],      [Labor],       [Hazmats],       [Warranty],[CustSat],    [Sublets],      [SalesTaxTotal],[ShopSupplies])&#xA;SELECT                          [shop_id],[ClosedDate], [Parts],      [Labor],       [Hazmats],       [Warranty],[CustomerSat],[Sublet],       [TotalTax],     [ShopSupplies]                               &#xA;FROM [Shopware].[dbo].[vw_DailySalesTotals]&#xA;  /* May need to add code to only insert the current date, unless going to purge and recreate the entire table daily*/&#xA;  go&#xA; &#xA;  /* update the Discounts */&#xA;  /* Discounts inserted here are parts &amp; labor discounts entered at the totals section of Shopware */&#xA;  update [DailySales]&#xA;  Set [DailySales].[LaborDiscount] = [vw_RODiscountTotals].[LaborDiscountTotal]&#xA;  From &#xA;   dbo.DailySales INNER JOIN&#xA;dbo.vw_RODiscountTotals ON dbo.DailySales.Store_id = dbo.vw_RODiscountTotals.shop_id AND dbo.DailySales.DrawerDate = dbo.vw_RODiscountTotals.ClosedDate&#xA;  go&#xA;  /* Update any NULLS to zero*/&#xA; Update DailySales&#xA;SET [Parts] = 0&#xA;Where [Parts] is null&#xA;go&#xA; Update DailySales&#xA;SET [Labor] = 0&#xA;Where [Labor] is null&#xA;go&#xA; Update DailySales&#xA;SET [Hazmats] = 0&#xA;Where [Hazmats] is null&#xA;go&#xA;Update DailySales&#xA;SET [Sublets] = 0&#xA;Where [Sublets] is null&#xA;go&#xA;Update DailySales&#xA;SET [LaborDiscount] = 0&#xA;Where [LaborDiscount] is null&#xA;go&#xA;Update DailySales&#xA;SET [CustSat] = 0&#xA;Where [CustSat] is null&#xA;go&#xA;Update DailySales&#xA;SET [NonTaxed] = 0&#xA;Where [NonTaxed] is null&#xA;go&#xA;Update DailySales&#xA;SET [SalesTaxTotal] = 0&#xA;Where [SalesTaxTotal] is null&#xA;go&#xA;Update DailySales&#xA;SET [SalesTaxState] = 0&#xA;Where [SalesTaxState] is null&#xA;go&#xA;Update DailySales&#xA;SET [SalesTaxCity] = 0&#xA;Where [SalesTaxCity] is null&#xA;go&#xA;Update DailySales&#xA;SET [Cash] = 0&#xA;Where [Cash] is null&#xA;go&#xA;Update DailySales&#xA;SET [Credit] = 0&#xA;Where [Credit] is null&#xA;go&#xA;Update DailySales&#xA;SET [EasyPay] = 0&#xA;Where [EasyPay] is null&#xA;go&#xA;Update DailySales&#xA;SET [Synchrony] = 0&#xA;Where [Synchrony] is null&#xA;go&#xA;Update DailySales&#xA;SET [ArFleet] = 0&#xA;Where [ArFleet] is null&#xA;go&#xA;Update DailySales&#xA;SET [ArEmployee] = 0&#xA;Where [ArEmployee] is null&#xA;go&#xA;Update DailySales&#xA;SET [AR] = 0&#xA;Where [AR] is null&#xA;go&#xA;Update DailySales&#xA;SET [Other] = 0&#xA;Where [Other] is null&#xA;go&#xA;Update DailySales&#xA;SET [CarCount] = 0&#xA;Where [CarCount] is null&#xA;go&#xA;/* Set null warranty and parts discounts to 0 */&#xA;Update DailySales&#xA;SET [PartsDiscount] = 0&#xA;Where [PartsDiscount] is null&#xA;go&#xA;Update DailySales&#xA;SET [Warranty] = 0&#xA;Where [Warranty] is null&#xA;go&#xA;&#xA;  /* Part discounts */&#xA;  &#xA;  update [DailySales]&#xA;  Set [DailySales].[PartsDiscount] = [DailySales].[PartsDiscount] + [vw_RODiscountTotals].[PartsDiscountTotal]&#xA;  From &#xA;   dbo.DailySales INNER JOIN&#xA;dbo.vw_RODiscountTotals ON dbo.DailySales.Store_id = dbo.vw_RODiscountTotals.shop_id AND dbo.DailySales.DrawerDate = dbo.vw_RODiscountTotals.ClosedDate&#xA;  go&#xA;   /* Remove the NonTaxed Part discounts per Iris*/&#xA;update ds&#xA;  Set ds.[PartsDiscount] = ds.[PartsDiscount] - dt.[PartDiscNonTax]&#xA;  From &#xA;   dbo.DailySales ds INNER JOIN&#xA;dbo.vw_NoTax_DiscountsTotals dt ON ds.Store_id = dt.shop_id AND ds.DrawerDate = dt.ClosedDate&#xA;  go&#xA;   &#xA; /* Insert the Payments for the day */&#xA; /* CASH */&#xA; UPDATE [dbo].[DailySales]&#xA; SET [DailySales].[Cash] = [vw_DailyPayments].[TotalAmt]&#xA; From &#xA;   dbo.DailySales INNER JOIN&#xA;dbo.[vw_DailyPayments] ON dbo.DailySales.Store_id = [vw_DailyPayments].shop_id AND dbo.DailySales.DrawerDate = [vw_DailyPayments].CreatedDate&#xA;  where dbo.[vw_DailyPayments].[payment_type] = 'Cash'&#xA;  go&#xA;  /* Add Checks to Cash */&#xA;  UPDATE [dbo].[DailySales]&#xA; SET [DailySales].[Cash] = [DailySales].[Cash] + [vw_DailyPayments].[TotalAmt]&#xA; From &#xA;   dbo.DailySales INNER JOIN&#xA;dbo.[vw_DailyPayments] ON dbo.DailySales.Store_id = [vw_DailyPayments].shop_id AND dbo.DailySales.DrawerDate = [vw_DailyPayments].CreatedDate&#xA;  where dbo.[vw_DailyPayments].[payment_type] = 'Check'&#xA;  go&#xA;  /* All CREDIT CARD types*/&#xA; UPDATE [dbo].[DailySales]&#xA; SET [DailySales].[Credit] = [vw_DailyPayments].[TotalAmt]&#xA; From &#xA;   dbo.DailySales INNER JOIN&#xA;dbo.[vw_DailyPayments] ON dbo.DailySales.Store_id = [vw_DailyPayments].shop_id AND dbo.DailySales.DrawerDate = [vw_DailyPayments].CreatedDate&#xA;  where dbo.[vw_DailyPayments].[payment_type] ='Credit Card' &#xA;  go&#xA;  &#xA;UPDATE [dbo].[DailySales]&#xA; SET [DailySales].[Credit] = [vw_DailyPayments].[TotalAmt] + [DailySales].[Credit]&#xA; From &#xA;   dbo.DailySales INNER JOIN&#xA;dbo.[vw_DailyPayments] ON dbo.DailySales.Store_id = [vw_DailyPayments].shop_id AND dbo.DailySales.DrawerDate = [vw_DailyPayments].CreatedDate&#xA;  where dbo.[vw_DailyPayments].[payment_type] ='Credit Card via Remote Pay' &#xA;  go&#xA;  &#xA;  UPDATE [dbo].[DailySales]&#xA; SET [DailySales].[Credit] = [vw_DailyPayments].[TotalAmt] + [DailySales].[Credit]&#xA; From &#xA;   dbo.DailySales INNER JOIN&#xA;dbo.[vw_DailyPayments] ON dbo.DailySales.Store_id = [vw_DailyPayments].shop_id AND dbo.DailySales.DrawerDate = [vw_DailyPayments].CreatedDate&#xA;  where dbo.[vw_DailyPayments].[payment_type] ='Credit Card via Terminal' &#xA;  go&#xA;  &#xA;    /* EasyPay */&#xA; UPDATE [dbo].[DailySales]&#xA; SET [DailySales].[EasyPay] = [vw_DailyPayments].[TotalAmt]&#xA; From &#xA;   dbo.DailySales INNER JOIN&#xA;dbo.[vw_DailyPayments] ON dbo.DailySales.Store_id = [vw_DailyPayments].shop_id AND dbo.DailySales.DrawerDate = [vw_DailyPayments].CreatedDate&#xA;  where dbo.[vw_DailyPayments].[payment_type] = 'Other - EasyPay'&#xA;  go&#xA;  &#xA;   /* Synchrony */&#xA; UPDATE [dbo].[DailySales]&#xA; SET [DailySales].[Synchrony] = [vw_DailyPayments].[TotalAmt]&#xA; From &#xA;   dbo.DailySales INNER JOIN&#xA;dbo.[vw_DailyPayments] ON dbo.DailySales.Store_id = [vw_DailyPayments].shop_id AND dbo.DailySales.DrawerDate = [vw_DailyPayments].CreatedDate&#xA;  where dbo.[vw_DailyPayments].[payment_type] = 'Other - Synchrony'&#xA;  go&#xA;     /* Fleet */&#xA; UPDATE [dbo].[DailySales]&#xA; SET [DailySales].[ArFleet] = [vw_DailyPayments].[TotalAmt]&#xA; From &#xA;   dbo.DailySales INNER JOIN&#xA;dbo.[vw_DailyPayments] ON dbo.DailySales.Store_id = [vw_DailyPayments].shop_id AND dbo.DailySales.DrawerDate = [vw_DailyPayments].CreatedDate&#xA;  where dbo.[vw_DailyPayments].[payment_type] = 'Other - Fleet AR'&#xA;  go&#xA;&#xA;    /* Employee */&#xA; UPDATE [dbo].[DailySales]&#xA; SET [DailySales].[ArEmployee] = [vw_DailyPayments].[TotalAmt]&#xA; From &#xA;   dbo.DailySales INNER JOIN&#xA;dbo.[vw_DailyPayments] ON dbo.DailySales.Store_id = [vw_DailyPayments].shop_id AND dbo.DailySales.DrawerDate = [vw_DailyPayments].CreatedDate&#xA;  where dbo.[vw_DailyPayments].[payment_type] = 'Other - Employee AR'&#xA;  go&#xA;&#xA;       /* Other */&#xA; UPDATE [dbo].[DailySales]&#xA; SET [DailySales].[Other] = [vw_DailyPayments].[TotalAmt]&#xA; From &#xA;   dbo.DailySales INNER JOIN&#xA;dbo.[vw_DailyPayments] ON dbo.DailySales.Store_id = [vw_DailyPayments].shop_id AND dbo.DailySales.DrawerDate = [vw_DailyPayments].CreatedDate&#xA;  where dbo.[vw_DailyPayments].[payment_type] = 'Check'&#xA;  go&#xA;&#xA;   /* Warranty */&#xA; UPDATE [dbo].[DailySales]&#xA; SET [DailySales].[warranty] = [vw_DailyPayments].[TotalAmt] * -1&#xA; From &#xA;   dbo.DailySales INNER JOIN&#xA;dbo.[vw_DailyPayments] ON dbo.DailySales.Store_id = [vw_DailyPayments].shop_id AND dbo.DailySales.DrawerDate = [vw_DailyPayments].CreatedDate&#xA;  where dbo.[vw_DailyPayments].[payment_type] = 'Other - Warranty'&#xA;  go&#xA;&#xA;&#xA;   /* Insert the Market */&#xA;    /* Run the copyTables SSIS job to keep this updated */&#xA;    UPDATE [dbo].[DailySales]&#xA; SET [DailySales].Market = [stores].[company]&#xA; From&#xA; dbo.DailySales INNER JOIN&#xA; [Stores] on DailySales.Store_id = [Stores].[StoreNum]&#xA; go&#xA;&#xA;   /* Non-Tax */&#xA;   /* Taxable = 1 or 0 */&#xA;   /*RO_Repair_orders  [DailySales].[ShopSupplies]*/&#xA;   /*Add all up and put in [DailySales].[NonTaxed]*/&#xA;  UPDATE ds&#xA;  SET ds.[NonTaxed] = nt.[nontaxed]&#xA;  FROM            &#xA;  dbo.vw_NoTax_ShopSuppliesTotals nt INNER JOIN&#xA; [DailySales] ds ON nt.shop_id = ds.Store_id AND nt.ClosedDate = ds.DrawerDate&#xA; go&#xA; /* Now Subtract the NonTaxed ShopSupplies sales from the Taxed ShopSupplies Sales per Iris*/ &#xA;  UPDATE ds&#xA;  SET ds.[ShopSupplies] =  ds.[ShopSupplies] - nt.[nontaxed]&#xA;  FROM&#xA;  dbo.vw_NoTax_ShopSuppliesTotals nt INNER JOIN&#xA; [DailySales] ds ON nt.shop_id = ds.Store_id AND nt.ClosedDate = ds.DrawerDate&#xA; go&#xA;  &#xA;  /* RO_Hazmats  [DailySales].[Hazmats]*/&#xA;  UPDATE ds&#xA;  SET ds.[NonTaxed] =  ds.[NonTaxed] + nt.[nontaxed]&#xA;  FROM&#xA;  dbo.vw_NoTax_HazmatsTotals nt INNER JOIN&#xA; [DailySales] ds ON nt.shop_id = ds.Store_id AND nt.ClosedDate = ds.DrawerDate&#xA; go&#xA;  /* Now subtract the NonTaxed Hazmats per Iris */&#xA;update ds&#xA;  Set ds.[NonTaxed] = ds.[NonTaxed] - dt.[NonTaxed]&#xA;  From &#xA;   dbo.DailySales ds INNER JOIN&#xA;vw_NoTax_HazmatsTotals dt ON ds.Store_id = dt.shop_id AND ds.DrawerDate = dt.ClosedDate&#xA;  go&#xA;  /* RO_Labors  [DailySales].[Labor]*/&#xA;   UPDATE ds&#xA;  SET ds.[NonTaxed] =  ds.[NonTaxed] + nt.[nontaxed]&#xA;  FROM&#xA;  dbo.vw_NoTax_LaborsTotals nt INNER JOIN&#xA; [DailySales] ds ON nt.shop_id = ds.Store_id AND nt.ClosedDate = ds.DrawerDate&#xA; go&#xA; /* Now Subtract the NonTaxed LABOR sales from the Taxed LABOR Sales - Added for NMX*/ &#xA;  UPDATE ds&#xA;  SET ds.[labor] =  ds.[labor] - nt.[nontaxed]&#xA;  FROM&#xA;  dbo.vw_NoTax_LaborsTotals nt INNER JOIN&#xA; [DailySales] ds ON nt.shop_id = ds.Store_id AND nt.ClosedDate = ds.DrawerDate&#xA; go&#xA;  /* RO_Parts   [DailySales].[Parts]*/&#xA;   UPDATE ds&#xA;  SET ds.[NonTaxed] =  ds.[NonTaxed] + nt.[nontaxed]&#xA;  FROM&#xA;  dbo.vw_NoTax_PartsTotals nt INNER JOIN&#xA; [DailySales] ds ON nt.shop_id = ds.Store_id AND nt.ClosedDate = ds.DrawerDate&#xA; go&#xA; /* Now Subtract the NonTaxed Part sales from the Taxed Part Sales per Iris*/ &#xA;  UPDATE ds&#xA;  SET ds.[Parts] =  ds.[Parts] - nt.[nontaxed]&#xA;  FROM&#xA;  dbo.vw_NoTax_PartsTotals nt INNER JOIN&#xA; [DailySales] ds ON nt.shop_id = ds.Store_id AND nt.ClosedDate = ds.DrawerDate&#xA; go&#xA;   /* RO_Sublets  [DailySales].[Sublets]*/&#xA; UPDATE ds&#xA;  SET ds.[NonTaxed] =  ds.[NonTaxed] + nt.[nontaxed]&#xA;  FROM&#xA;  dbo.vw_NoTax_SubletTotals nt INNER JOIN&#xA; [DailySales] ds ON nt.shop_id = ds.Store_id AND nt.ClosedDate = ds.DrawerDate&#xA; go&#xA; /* Now subtract the NonTaxed sublets (labor) per Iris */&#xA; UPDATE ds&#xA;  SET ds.[Sublets] =  ds.[Sublets] - nt.[nontaxed]&#xA;  FROM&#xA;  dbo.vw_NoTax_SubletTotals nt INNER JOIN&#xA; [DailySales] ds ON nt.shop_id = ds.Store_id AND nt.ClosedDate = ds.DrawerDate&#xA; go&#xA;  &#xA;  /*Update Car Counts */&#xA;update [DailySales]&#xA;  Set [DailySales].[CarCount] = [vw_CarCount].[CarCount] &#xA;  From&#xA;   dbo.DailySales INNER JOIN&#xA; dbo.vw_CarCount ON dbo.DailySales.Store_id = dbo.vw_CarCount.shop_id &#xA; AND dbo.DailySales.DrawerDate = dbo.vw_CarCount.ClosedDate&#xA;go&#xA; &#xA;/* Set the State and City Taxes */&#xA;   &#xA; /* Update City Tax */&#xA;/* Update Hazmat Tax */&#xA;UPDATE ds&#xA;SET ds.[SalesTaxCity] = ds.[SalesTaxCity] + dt.[TotalCityTax]&#xA;FROM&#xA;vw_DailyHazmatTax dt INNER JOIN&#xA;[DailySales] ds ON dt.shop_id = ds.Store_id AND dt.ClosedDate = ds.DrawerDate&#xA;go&#xA;&#xA;/* Update Labor Tax */&#xA;UPDATE ds&#xA;SET ds.[SalesTaxCity] = ds.[SalesTaxCity] + dt.[TotalCityTax]&#xA;FROM&#xA;vw_DailyLaborTax dt INNER JOIN&#xA;[DailySales] ds ON dt.shop_id = ds.Store_id AND dt.ClosedDate = ds.DrawerDate&#xA;go&#xA;&#xA;/* Update Part Tax */&#xA;UPDATE ds&#xA;SET ds.[SalesTaxCity] = ds.[SalesTaxCity] + dt.[TotalCityTax]&#xA;FROM&#xA;vw_DailyPartTax dt INNER JOIN&#xA;[DailySales] ds ON dt.shop_id = ds.Store_id AND dt.ClosedDate = ds.DrawerDate&#xA;go&#xA;&#xA;/* Update ShopSupplies Tax */&#xA;UPDATE ds&#xA;SET ds.[SalesTaxCity] = ds.[SalesTaxCity] + dt.[TotalCityTax]&#xA;FROM&#xA;vw_DailyShopSuppTax dt INNER JOIN&#xA;[DailySales] ds ON dt.shop_id = ds.Store_id AND dt.ClosedDate = ds.DrawerDate&#xA;go&#xA;&#xA;/* Update Sublet Tax */&#xA;UPDATE ds&#xA;SET ds.[SalesTaxCity] = ds.[SalesTaxCity] + dt.[TotalCityTax]&#xA;FROM&#xA;vw_DailySubletTax dt INNER JOIN&#xA;[DailySales] ds ON dt.shop_id = ds.Store_id AND dt.ClosedDate = ds.DrawerDate&#xA;go&#xA;/* Update Tax Discounts  */&#xA;UPDATE ds&#xA;SET ds.[SalesTaxCity] = ds.[SalesTaxCity] + dt.[CityTaxDiscount]&#xA;FROM&#xA;vw_DailyTaxDiscounts dt INNER JOIN&#xA;[DailySales] ds ON dt.shop_id = ds.Store_id AND dt.ClosedDate = ds.DrawerDate&#xA;go&#xA;&#xA;  /* Update State Tax */&#xA;/* Update Hazmat Tax */&#xA;UPDATE ds&#xA;SET ds.[SalesTaxState] = ds.[SalesTaxState] + dt.[TotalStateTax]&#xA;FROM&#xA;vw_DailyHazmatTax dt INNER JOIN&#xA;[DailySales] ds ON dt.shop_id = ds.Store_id AND dt.ClosedDate = ds.DrawerDate&#xA;go&#xA;&#xA;/* Update Labor Tax */&#xA;UPDATE ds&#xA;SET ds.[SalesTaxState] = ds.[SalesTaxState] + dt.[TotalStateTax]&#xA;FROM&#xA;vw_DailyLaborTax dt INNER JOIN&#xA;[DailySales] ds ON dt.shop_id = ds.Store_id AND dt.ClosedDate = ds.DrawerDate&#xA;go&#xA;&#xA;/* Update Part Tax */&#xA;UPDATE ds&#xA;SET ds.[SalesTaxState] = ds.[SalesTaxState] + dt.[TotalStateTax]&#xA;FROM&#xA;vw_DailyPartTax dt INNER JOIN&#xA;[DailySales] ds ON dt.shop_id = ds.Store_id AND dt.ClosedDate = ds.DrawerDate&#xA;go&#xA;&#xA;/* Update ShopSupplies Tax */&#xA;UPDATE ds&#xA;SET ds.[SalesTaxState] = ds.[SalesTaxState] + dt.[TotalStateTax]&#xA;FROM&#xA;vw_DailyShopSuppTax dt INNER JOIN&#xA;[DailySales] ds ON dt.shop_id = ds.Store_id AND dt.ClosedDate = ds.DrawerDate&#xA;go&#xA;&#xA;/* Update Sublet Tax */&#xA;UPDATE ds&#xA;SET ds.[SalesTaxState] = ds.[SalesTaxState] + dt.[TotalStateTax]&#xA;FROM&#xA;vw_DailySubletTax dt INNER JOIN&#xA;[DailySales] ds ON dt.shop_id = ds.Store_id AND dt.ClosedDate = ds.DrawerDate&#xA;go&#xA;&#xA;/* Update Tax Discounts  */&#xA;UPDATE ds&#xA;SET ds.[SalesTaxState] = ds.[SalesTaxState] + dt.[StateTaxDiscount]&#xA;FROM&#xA;vw_DailyTaxDiscounts dt INNER JOIN&#xA;[DailySales] ds ON dt.shop_id = ds.Store_id AND dt.ClosedDate = ds.DrawerDate&#xA;go" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Cleanup Daily Sales"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{EC6125AA-2E75-4C0A-A814-5A3C6D78719B}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Cleanup Daily Sales"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{70B00996-976E-4CED-8497-F1185E357765}"
+          SQLTask:BypassPrepare="False"
+          SQLTask:SqlStatementSource="Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 211 and DrawerDate &lt; '2021-07-18'&#xA;GO&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 204 and DrawerDate &lt; '2021-09-20'&#xA;GO&#xA;  &#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 109 and DrawerDate &lt; '2021-09-20'&#xA;GO&#xA;  &#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 108 and DrawerDate &lt; '2021-09-20'&#xA;go&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 159 and DrawerDate &lt; '2021-09-26'&#xA;go&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 228 and DrawerDate &lt; '2021-09-26'&#xA;go&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 126 and DrawerDate &lt; '2021-09-26'&#xA;go&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 192 and DrawerDate &lt; '2021-10-04'&#xA;go&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 230 and DrawerDate &lt; '2021-10-04'&#xA;go&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 107 and DrawerDate &lt; '2021-10-04'&#xA;go&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 208 and DrawerDate &lt; '2021-10-11'&#xA;go&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 225 and DrawerDate &lt; '2021-10-11'&#xA;go&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 227 and DrawerDate &lt; '2021-10-11'&#xA;go&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 110 and DrawerDate &lt; '2021-10-18'&#xA;go&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 102 and DrawerDate &lt; '2021-10-18'&#xA;go&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 106 and DrawerDate &lt; '2021-10-18'&#xA;go&#xA;&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 174 and DrawerDate &lt; '2021-10-25'&#xA;go&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 210 and DrawerDate &lt; '2021-10-25'&#xA;go&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 232 and DrawerDate &lt; '2021-10-25'&#xA;go&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 221 and DrawerDate &lt; '2021-11-1'&#xA;go&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 229 and DrawerDate &lt; '2021-11-1'&#xA;go&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 138 and DrawerDate &lt; '2021-11-1'&#xA;go&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 115 and DrawerDate &lt; '2021-11-8'&#xA;go&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 103 and DrawerDate &lt; '2021-11-8'&#xA;go&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 104 and DrawerDate &lt; '2021-11-8'&#xA;go&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 196 and DrawerDate &lt; '2021-11-15'&#xA;go&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 116 and DrawerDate &lt; '2021-11-15'&#xA;go&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 105 and DrawerDate &lt; '2021-11-15'&#xA;go&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 101 and DrawerDate &lt; '2021-11-22'&#xA;go&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 111 and DrawerDate &lt; '2021-11-22'&#xA;go&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 125 and DrawerDate &lt; '2021-11-22'&#xA;go&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 200 and DrawerDate &lt; '2021-12-06'&#xA;go&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 128 and DrawerDate &lt; '2021-12-06'&#xA;go&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 169 and DrawerDate &lt; '2021-12-06'&#xA;go&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 222 and DrawerDate &lt; '2021-12-13'&#xA;go&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 151 and DrawerDate &lt; '2021-12-13'&#xA;go&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 155 and DrawerDate &lt; '2021-12-13'&#xA;go&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 231 and DrawerDate &lt; '2021-12-20'&#xA;go&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 184 and DrawerDate &lt; '2021-12-20'&#xA;go&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 167 and DrawerDate &lt; '2021-12-20'&#xA;go&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 206 and DrawerDate &lt; '2022-01-10'&#xA;go&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 209 and DrawerDate &lt; '2022-01-10'&#xA;go&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 122 and DrawerDate &lt; '2022-01-10'&#xA;go&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 199 and DrawerDate &lt; '2022-01-17'&#xA;go&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 212 and DrawerDate &lt; '2022-01-17'&#xA;go&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 215 and DrawerDate &lt; '2022-01-17'&#xA;go&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 193 and DrawerDate &lt; '2022-01-24'&#xA;go&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 146 and DrawerDate &lt; '2022-01-31'&#xA;go&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 148 and DrawerDate &lt; '2022-01-31'&#xA;go&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 154 and DrawerDate &lt; '2022-01-31'&#xA;go&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 139 and DrawerDate &lt; '2022-02-07'&#xA;go&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 147 and DrawerDate &lt; '2022-02-07'&#xA;go&#xA;&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 224 and DrawerDate &lt; '2022-02-07'&#xA;go&#xA;&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 186 and DrawerDate &lt; '2022-02-14'&#xA;go&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 205 and DrawerDate &lt; '2022-02-14'&#xA;go&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 207 and DrawerDate &lt; '2022-02-14'&#xA;go&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 226 and DrawerDate &lt; '2022-02-21'&#xA;go&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 185 and DrawerDate &lt; '2022-02-28'&#xA;go&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 187 and DrawerDate &lt; '2022-02-28'&#xA;go&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 223 and DrawerDate &lt; '2022-02-28'&#xA;go&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 175 and DrawerDate &lt; '2022-03-07'&#xA;go&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 176 and DrawerDate &lt; '2022-03-07'&#xA;go&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 177 and DrawerDate &lt; '2022-03-07'&#xA;go&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 132 and DrawerDate &lt; '2022-03-14'&#xA;go&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 162 and DrawerDate &lt; '2022-03-14'&#xA;go&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 219 and DrawerDate &lt; '2022-03-14'&#xA;go&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 131 and DrawerDate &lt; '2022-03-21'&#xA;go&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 133 and DrawerDate &lt; '2022-03-21'&#xA;go&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 220 and DrawerDate &lt; '2022-03-21'&#xA;go&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 163 and DrawerDate &lt; '2022-03-28'&#xA;go&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 164 and DrawerDate &lt; '2022-03-28'&#xA;go&#xA;&#xA;Delete&#xA;FROM [Shopware].[dbo].[DailySales]&#xA;WHERE store_id = 195  and DrawerDate &lt; '2022-03-30'&#xA;go&#xA;&#xA;--Add Each store as we go live" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Execute SQL Task"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{AA6020AE-4D5C-4DD7-A735-F33B9350F76F}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Execute SQL Task"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{19F7DAFA-4BB4-4796-9EE5-62387F00C3C4}"
+          SQLTask:BypassPrepare="False"
+          SQLTask:SqlStatementSource="update tblDailySales&#xA;Set Donations = 0 &#xA;Where donations is null" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Purge Shopware Daily Sales"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{194A9542-21F1-4D2C-9B26-3F69F64D2941}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Purge Shopware Daily Sales"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{70B00996-976E-4CED-8497-F1185E357765}"
+          SQLTask:BypassPrepare="False"
+          SQLTask:SqlStatementSource="/* Purge table for testing*/&#xA;Use Shopware&#xA;truncate table dailysales" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Update Middleware"
+      DTS:CreationName="Microsoft.Pipeline"
+      DTS:Description="Data Flow Task"
+      DTS:DTSID="{961540FE-A9EF-4DCE-BA0F-1AC8014834D9}"
+      DTS:ExecutableType="Microsoft.Pipeline"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Update Middleware"
+      DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <pipeline
+          version="1">
+          <components>
+            <component
+              refId="Package\Update Middleware\OLE DB Destination"
+              componentClassID="Microsoft.OLEDBDestination"
+              contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
+              description="OLE DB Destination"
+              name="OLE DB Destination"
+              usesDispositions="true"
+              version="4">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">[dbo].[tblDailySales]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">3</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepIdentity">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the columns containing null will have null inserted in the destination. If false, columns containing null will have their default values inserted at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepNulls">false</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies options to be used with fast load.  Applies only if fast load is turned on."
+                  name="FastLoadOptions">TABLOCK,CHECK_CONSTRAINTS</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion.  Applies only if fast load is turned on."
+                  name="FastLoadMaxInsertCommitSize">2147483647</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Update Middleware\OLE DB Destination.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[brakesql.Middleware]"
+                  connectionManagerRefId="Package.ConnectionManagers[brakesql.Middleware]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Update Middleware\OLE DB Destination.Inputs[OLE DB Destination Input]"
+                  errorOrTruncationOperation="Insert"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="OLE DB Destination Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Update Middleware\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[DrawerDate]"
+                      cachedDataType="dbDate"
+                      cachedName="DrawerDate"
+                      externalMetadataColumnId="Package\Update Middleware\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[DrawerDate]"
+                      lineageId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].Columns[DrawerDate]" />
+                    <inputColumn
+                      refId="Package\Update Middleware\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[CarCount]"
+                      cachedDataType="i4"
+                      cachedName="CarCount"
+                      externalMetadataColumnId="Package\Update Middleware\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[CarCount]"
+                      lineageId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].Columns[CarCount]" />
+                    <inputColumn
+                      refId="Package\Update Middleware\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[CustSat]"
+                      cachedDataType="numeric"
+                      cachedName="CustSat"
+                      cachedPrecision="10"
+                      cachedScale="2"
+                      externalMetadataColumnId="Package\Update Middleware\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[CustSat]"
+                      lineageId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].Columns[CustSat]" />
+                    <inputColumn
+                      refId="Package\Update Middleware\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[Labor]"
+                      cachedDataType="numeric"
+                      cachedName="Labor"
+                      cachedPrecision="10"
+                      cachedScale="2"
+                      externalMetadataColumnId="Package\Update Middleware\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Labor]"
+                      lineageId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].Columns[Labor]" />
+                    <inputColumn
+                      refId="Package\Update Middleware\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[NonTaxed]"
+                      cachedDataType="numeric"
+                      cachedName="NonTaxed"
+                      cachedPrecision="10"
+                      cachedScale="2"
+                      externalMetadataColumnId="Package\Update Middleware\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[NonTaxed]"
+                      lineageId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].Columns[NonTaxed]" />
+                    <inputColumn
+                      refId="Package\Update Middleware\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[ShopSupplies]"
+                      cachedDataType="numeric"
+                      cachedName="ShopSupplies"
+                      cachedPrecision="10"
+                      cachedScale="2"
+                      externalMetadataColumnId="Package\Update Middleware\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[ShopSupplies]"
+                      lineageId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].Columns[ShopSupplies]" />
+                    <inputColumn
+                      refId="Package\Update Middleware\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[Warranty]"
+                      cachedDataType="numeric"
+                      cachedName="Warranty"
+                      cachedPrecision="10"
+                      cachedScale="2"
+                      externalMetadataColumnId="Package\Update Middleware\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Warranty]"
+                      lineageId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].Columns[Warranty]" />
+                    <inputColumn
+                      refId="Package\Update Middleware\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[ARTotal]"
+                      cachedDataType="numeric"
+                      cachedName="ARTotal"
+                      cachedPrecision="11"
+                      cachedScale="2"
+                      externalMetadataColumnId="Package\Update Middleware\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[ARTotal]"
+                      lineageId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].Columns[ARTotal]" />
+                    <inputColumn
+                      refId="Package\Update Middleware\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[TotalDiscount]"
+                      cachedDataType="numeric"
+                      cachedName="TotalDiscount"
+                      cachedPrecision="11"
+                      cachedScale="2"
+                      externalMetadataColumnId="Package\Update Middleware\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Discount]"
+                      lineageId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].Columns[TotalDiscount]" />
+                    <inputColumn
+                      refId="Package\Update Middleware\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[Hazmats]"
+                      cachedDataType="numeric"
+                      cachedName="Hazmats"
+                      cachedPrecision="10"
+                      cachedScale="2"
+                      externalMetadataColumnId="Package\Update Middleware\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[HazWaste]"
+                      lineageId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].Columns[Hazmats]" />
+                    <inputColumn
+                      refId="Package\Update Middleware\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[SalesTaxState]"
+                      cachedDataType="numeric"
+                      cachedName="SalesTaxState"
+                      cachedPrecision="10"
+                      cachedScale="2"
+                      externalMetadataColumnId="Package\Update Middleware\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[StateTax]"
+                      lineageId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].Columns[SalesTaxState]" />
+                    <inputColumn
+                      refId="Package\Update Middleware\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[SalesTaxCity]"
+                      cachedDataType="numeric"
+                      cachedName="SalesTaxCity"
+                      cachedPrecision="10"
+                      cachedScale="2"
+                      externalMetadataColumnId="Package\Update Middleware\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[CityTax]"
+                      lineageId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].Columns[SalesTaxCity]" />
+                    <inputColumn
+                      refId="Package\Update Middleware\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[Shop_id]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="3"
+                      cachedName="Shop_id"
+                      externalMetadataColumnId="Package\Update Middleware\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Store_id]"
+                      lineageId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].Columns[Shop_id]" />
+                    <inputColumn
+                      refId="Package\Update Middleware\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[Parts]"
+                      cachedDataType="numeric"
+                      cachedName="Parts"
+                      cachedPrecision="10"
+                      cachedScale="2"
+                      externalMetadataColumnId="Package\Update Middleware\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Parts]"
+                      lineageId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].Columns[Parts]" />
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Update Middleware\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[DrawerDate]"
+                      dataType="dbTimeStamp"
+                      name="DrawerDate" />
+                    <externalMetadataColumn
+                      refId="Package\Update Middleware\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Store_id]"
+                      codePage="1252"
+                      dataType="str"
+                      length="3"
+                      name="Store_id" />
+                    <externalMetadataColumn
+                      refId="Package\Update Middleware\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[id]"
+                      dataType="i4"
+                      name="id" />
+                    <externalMetadataColumn
+                      refId="Package\Update Middleware\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[CarCount]"
+                      dataType="i4"
+                      name="CarCount" />
+                    <externalMetadataColumn
+                      refId="Package\Update Middleware\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[CustSat]"
+                      dataType="numeric"
+                      name="CustSat"
+                      precision="18"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Update Middleware\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Discount]"
+                      dataType="numeric"
+                      name="Discount"
+                      precision="18"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Update Middleware\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Donations]"
+                      dataType="numeric"
+                      name="Donations"
+                      precision="18"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Update Middleware\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[HazWaste]"
+                      dataType="numeric"
+                      name="HazWaste"
+                      precision="18"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Update Middleware\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Labor]"
+                      dataType="numeric"
+                      name="Labor"
+                      precision="18"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Update Middleware\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[NonTaxed]"
+                      dataType="numeric"
+                      name="NonTaxed"
+                      precision="18"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Update Middleware\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Parts]"
+                      dataType="numeric"
+                      name="Parts"
+                      precision="18"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Update Middleware\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[ShopSupplies]"
+                      dataType="numeric"
+                      name="ShopSupplies"
+                      precision="18"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Update Middleware\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Warranty]"
+                      dataType="numeric"
+                      name="Warranty"
+                      precision="18"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Update Middleware\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[StateTax]"
+                      dataType="numeric"
+                      name="StateTax"
+                      precision="18"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Update Middleware\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[CityTax]"
+                      dataType="numeric"
+                      name="CityTax"
+                      precision="18"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Update Middleware\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[ARTotal]"
+                      dataType="numeric"
+                      name="ARTotal"
+                      precision="18"
+                      scale="2" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Update Middleware\OLE DB Destination.Outputs[OLE DB Destination Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="OLE DB Destination Error Output"
+                  synchronousInputId="Package\Update Middleware\OLE DB Destination.Inputs[OLE DB Destination Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Update Middleware\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Update Middleware\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Update Middleware\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Update Middleware\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Update Middleware\OLE DB Source"
+              componentClassID="Microsoft.OLEDBSource"
+              contactInfo="OLE DB Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;7"
+              description="OLE DB Source"
+              name="OLE DB Source"
+              usesDispositions="true"
+              version="7">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset"></property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">SELECT 
+       [DrawerDate]
+	  ,cast([Store_id] as char(3)) as Shop_id
+	  ,[CarCount]
+	   ,[CustSat]
+	   ,[PartsDiscount] + [LaborDiscount] AS TotalDiscount
+	   ,[Hazmats]
+                      ,[Labor]+  [Sublets] as Labor
+	  ,[NonTaxed]
+	  ,[Parts]  
+                     ,[ShopSupplies]
+	  ,[Warranty]
+                    ,[SalesTaxState]
+                    ,[SalesTaxCity]
+                    ,[ArFleet] + [AR] + [AREmployee] AS ARTotal
+
+  FROM [Shopware].[dbo].[DailySales]
+Where drawerDate &gt; '2021-07-18'</property>
+                <property
+                  dataType="System.String"
+                  description="The variable that contains the SQL command to be executed."
+                  name="SqlCommandVariable"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">2</property>
+                <property
+                  dataType="System.String"
+                  description="The mappings between the parameters in the SQL command and variables."
+                  name="ParameterMapping"></property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Update Middleware\OLE DB Source.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[brakesql.Shopware]"
+                  connectionManagerRefId="Package.ConnectionManagers[brakesql.Shopware]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <outputs>
+                <output
+                  refId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output]"
+                  name="OLE DB Source Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].Columns[DrawerDate]"
+                      dataType="dbDate"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[DrawerDate]"
+                      lineageId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].Columns[DrawerDate]"
+                      name="DrawerDate"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].Columns[CarCount]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[CarCount]"
+                      lineageId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].Columns[CarCount]"
+                      name="CarCount"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].Columns[CustSat]"
+                      dataType="numeric"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[CustSat]"
+                      lineageId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].Columns[CustSat]"
+                      name="CustSat"
+                      precision="10"
+                      scale="2"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].Columns[TotalDiscount]"
+                      dataType="numeric"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[TotalDiscount]"
+                      lineageId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].Columns[TotalDiscount]"
+                      name="TotalDiscount"
+                      precision="11"
+                      scale="2"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].Columns[Hazmats]"
+                      dataType="numeric"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Hazmats]"
+                      lineageId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].Columns[Hazmats]"
+                      name="Hazmats"
+                      precision="10"
+                      scale="2"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].Columns[Labor]"
+                      dataType="numeric"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Labor]"
+                      lineageId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].Columns[Labor]"
+                      name="Labor"
+                      precision="10"
+                      scale="2"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].Columns[NonTaxed]"
+                      dataType="numeric"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[NonTaxed]"
+                      lineageId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].Columns[NonTaxed]"
+                      name="NonTaxed"
+                      precision="10"
+                      scale="2"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].Columns[ShopSupplies]"
+                      dataType="numeric"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[ShopSupplies]"
+                      lineageId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].Columns[ShopSupplies]"
+                      name="ShopSupplies"
+                      precision="10"
+                      scale="2"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].Columns[Warranty]"
+                      dataType="numeric"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Warranty]"
+                      lineageId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].Columns[Warranty]"
+                      name="Warranty"
+                      precision="10"
+                      scale="2"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].Columns[SalesTaxState]"
+                      dataType="numeric"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[SalesTaxState]"
+                      lineageId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].Columns[SalesTaxState]"
+                      name="SalesTaxState"
+                      precision="10"
+                      scale="2"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].Columns[SalesTaxCity]"
+                      dataType="numeric"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[SalesTaxCity]"
+                      lineageId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].Columns[SalesTaxCity]"
+                      name="SalesTaxCity"
+                      precision="10"
+                      scale="2"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].Columns[ARTotal]"
+                      dataType="numeric"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[ARTotal]"
+                      lineageId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].Columns[ARTotal]"
+                      name="ARTotal"
+                      precision="11"
+                      scale="2"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].Columns[Shop_id]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Shop_id]"
+                      length="3"
+                      lineageId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].Columns[Shop_id]"
+                      name="Shop_id"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].Columns[Parts]"
+                      dataType="numeric"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Parts]"
+                      lineageId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].Columns[Parts]"
+                      name="Parts"
+                      precision="10"
+                      scale="2"
+                      truncationRowDisposition="FailComponent" />
+                  </outputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[DrawerDate]"
+                      dataType="dbDate"
+                      name="DrawerDate" />
+                    <externalMetadataColumn
+                      refId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[CarCount]"
+                      dataType="i4"
+                      name="CarCount" />
+                    <externalMetadataColumn
+                      refId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[CustSat]"
+                      dataType="numeric"
+                      name="CustSat"
+                      precision="10"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[TotalDiscount]"
+                      dataType="numeric"
+                      name="TotalDiscount"
+                      precision="11"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Hazmats]"
+                      dataType="numeric"
+                      name="Hazmats"
+                      precision="10"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Labor]"
+                      dataType="numeric"
+                      name="Labor"
+                      precision="11"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[NonTaxed]"
+                      dataType="numeric"
+                      name="NonTaxed"
+                      precision="10"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[ShopSupplies]"
+                      dataType="numeric"
+                      name="ShopSupplies"
+                      precision="10"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Warranty]"
+                      dataType="numeric"
+                      name="Warranty"
+                      precision="10"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[SalesTaxState]"
+                      dataType="numeric"
+                      name="SalesTaxState"
+                      precision="10"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[SalesTaxCity]"
+                      dataType="numeric"
+                      name="SalesTaxCity"
+                      precision="10"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[ARTotal]"
+                      dataType="numeric"
+                      name="ARTotal"
+                      precision="12"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Shop_id]"
+                      codePage="1252"
+                      dataType="str"
+                      length="3"
+                      name="Shop_id" />
+                    <externalMetadataColumn
+                      refId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Parts]"
+                      dataType="numeric"
+                      name="Parts"
+                      precision="10"
+                      scale="2" />
+                  </externalMetadataColumns>
+                </output>
+                <output
+                  refId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Error Output]"
+                  isErrorOut="true"
+                  name="OLE DB Source Error Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[DrawerDate]"
+                      dataType="dbDate"
+                      lineageId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[DrawerDate]"
+                      name="DrawerDate" />
+                    <outputColumn
+                      refId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Shop_id]"
+                      codePage="1252"
+                      dataType="str"
+                      length="3"
+                      lineageId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Shop_id]"
+                      name="Shop_id" />
+                    <outputColumn
+                      refId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[CarCount]"
+                      dataType="i4"
+                      lineageId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[CarCount]"
+                      name="CarCount" />
+                    <outputColumn
+                      refId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[CustSat]"
+                      dataType="numeric"
+                      lineageId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[CustSat]"
+                      name="CustSat"
+                      precision="10"
+                      scale="2" />
+                    <outputColumn
+                      refId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[TotalDiscount]"
+                      dataType="numeric"
+                      lineageId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[TotalDiscount]"
+                      name="TotalDiscount"
+                      precision="11"
+                      scale="2" />
+                    <outputColumn
+                      refId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Hazmats]"
+                      dataType="numeric"
+                      lineageId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Hazmats]"
+                      name="Hazmats"
+                      precision="10"
+                      scale="2" />
+                    <outputColumn
+                      refId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Labor]"
+                      dataType="numeric"
+                      lineageId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Labor]"
+                      name="Labor"
+                      precision="11"
+                      scale="2" />
+                    <outputColumn
+                      refId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[NonTaxed]"
+                      dataType="numeric"
+                      lineageId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[NonTaxed]"
+                      name="NonTaxed"
+                      precision="10"
+                      scale="2" />
+                    <outputColumn
+                      refId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Parts]"
+                      dataType="numeric"
+                      lineageId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Parts]"
+                      name="Parts"
+                      precision="10"
+                      scale="2" />
+                    <outputColumn
+                      refId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ShopSupplies]"
+                      dataType="numeric"
+                      lineageId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ShopSupplies]"
+                      name="ShopSupplies"
+                      precision="10"
+                      scale="2" />
+                    <outputColumn
+                      refId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Warranty]"
+                      dataType="numeric"
+                      lineageId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Warranty]"
+                      name="Warranty"
+                      precision="10"
+                      scale="2" />
+                    <outputColumn
+                      refId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[SalesTaxState]"
+                      dataType="numeric"
+                      lineageId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[SalesTaxState]"
+                      name="SalesTaxState"
+                      precision="10"
+                      scale="2" />
+                    <outputColumn
+                      refId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[SalesTaxCity]"
+                      dataType="numeric"
+                      lineageId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[SalesTaxCity]"
+                      name="SalesTaxCity"
+                      precision="10"
+                      scale="2" />
+                    <outputColumn
+                      refId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ARTotal]"
+                      dataType="numeric"
+                      lineageId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ARTotal]"
+                      name="ARTotal"
+                      precision="12"
+                      scale="2" />
+                    <outputColumn
+                      refId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path
+              refId="Package\Update Middleware.Paths[OLE DB Source Output]"
+              endId="Package\Update Middleware\OLE DB Destination.Inputs[OLE DB Destination Input]"
+              name="OLE DB Source Output"
+              startId="Package\Update Middleware\OLE DB Source.Outputs[OLE DB Source Output]" />
+          </paths>
+        </pipeline>
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:PrecedenceConstraints>
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint]"
+      DTS:CreationName=""
+      DTS:DTSID="{13A761ED-C409-428F-9556-C351A18E0939}"
+      DTS:From="Package\Purge Shopware Daily Sales"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint"
+      DTS:To="Package\Build Shopware Daily Sales" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 1]"
+      DTS:CreationName=""
+      DTS:DTSID="{F8ECC136-7D61-46DC-8087-2ECE40196C7A}"
+      DTS:From="Package\Build Shopware Daily Sales"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 1"
+      DTS:To="Package\Cleanup Daily Sales" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 2]"
+      DTS:CreationName=""
+      DTS:DTSID="{E5059B91-7E63-4372-B4EC-574C9BEF7362}"
+      DTS:From="Package\Update Middleware"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 2"
+      DTS:To="Package\Execute SQL Task" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 3]"
+      DTS:CreationName=""
+      DTS:DTSID="{DD5F97F1-446D-4627-8572-21093ADDF397}"
+      DTS:From="Package\Cleanup Daily Sales"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 3"
+      DTS:To="Package\Update Middleware" />
+  </DTS:PrecedenceConstraints>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="16" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="214,42"
+          Id="Package\Build Shopware Daily Sales"
+          TopLeft="145,122" />
+        <NodeLayout
+          Size="178,42"
+          Id="Package\Cleanup Daily Sales"
+          TopLeft="492,115" />
+        <NodeLayout
+          Size="170,42"
+          Id="Package\Execute SQL Task"
+          TopLeft="369,302" />
+        <NodeLayout
+          Size="219,42"
+          Id="Package\Purge Shopware Daily Sales"
+          TopLeft="52,6" />
+        <NodeLayout
+          Size="174,42"
+          Id="Package\Update Middleware"
+          TopLeft="281,218" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint]"
+          TopLeft="161.5,48">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="90.5,74"
+              Start="0,0"
+              End="90.5,66.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,33" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,33"
+                    Point2="0,37"
+                    Point3="4,37" />
+                  <mssgle:LineSegment
+                    End="86.5,37" />
+                  <mssgle:CubicBezierSegment
+                    Point1="86.5,37"
+                    Point2="90.5,37"
+                    Point3="90.5,41" />
+                  <mssgle:LineSegment
+                    End="90.5,66.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 1]"
+          TopLeft="359,139.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="133,0"
+              Start="0,0"
+              End="125.5,0">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="125.5,0" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 2]"
+          TopLeft="368,260">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="86,42"
+              Start="0,0"
+              End="86,34.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,17" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,17"
+                    Point2="0,21"
+                    Point3="4,21" />
+                  <mssgle:LineSegment
+                    End="82,21" />
+                  <mssgle:CubicBezierSegment
+                    Point1="82,21"
+                    Point2="86,21"
+                    Point3="86,25" />
+                  <mssgle:LineSegment
+                    End="86,34.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 3]"
+          TopLeft="581,157">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-213,61"
+              Start="0,0"
+              End="-213,53.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,26.5" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,26.5"
+                    Point2="0,30.5"
+                    Point3="-4,30.5" />
+                  <mssgle:LineSegment
+                    End="-209,30.5" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-209,30.5"
+                    Point2="-213,30.5"
+                    Point3="-213,34.5" />
+                  <mssgle:LineSegment
+                    End="-213,53.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+  <TaskHost
+    design-time-name="Package\Update Middleware">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mssgm="clr-namespace:Microsoft.SqlServer.Graph.Model;assembly=Microsoft.SqlServer.Graph">
+        <NodeLayout
+          Size="177,42"
+          Id="Package\Update Middleware\OLE DB Destination"
+          TopLeft="100,128" />
+        <NodeLayout
+          Size="157,42"
+          Id="Package\Update Middleware\OLE DB Source"
+          TopLeft="9.5,7.5" />
+        <EdgeLayout
+          Id="Package\Update Middleware.Paths[OLE DB Source Output]"
+          TopLeft="88,49.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="100.5,78.5"
+              Start="0,0"
+              End="100.5,71">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,35.25" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,35.25"
+                    Point2="0,39.25"
+                    Point3="4,39.25" />
+                  <mssgle:LineSegment
+                    End="96.5,39.25" />
+                  <mssgle:CubicBezierSegment
+                    Point1="96.5,39.25"
+                    Point2="100.5,39.25"
+                    Point3="100.5,43.25" />
+                  <mssgle:LineSegment
+                    End="100.5,71" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <mssgm:EdgeLabel
+              BoundingBox="0,0,0,0"
+              RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Update Middleware\OLE DB Destination">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\Update Middleware\OLE DB Source">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>

@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31410.357
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{159641D6-6404-4A2A-AE62-294DE0FE8301}") = "ARInvoice", "ARInvoice.dtproj", "{BDB83C61-D9D1-42C3-972D-586BEF194E3E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Development|Default = Development|Default
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BDB83C61-D9D1-42C3-972D-586BEF194E3E}.Development|Default.ActiveCfg = Development
+		{BDB83C61-D9D1-42C3-972D-586BEF194E3E}.Development|Default.Build.0 = Development
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E4FE3D3F-ADB5-4C66-A7D4-0AF22AFEC7D0}
+	EndGlobalSection
+EndGlobal

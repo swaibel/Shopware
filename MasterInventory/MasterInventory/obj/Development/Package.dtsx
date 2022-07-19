@@ -1,0 +1,730 @@
+<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="2/21/2022 12:01:49 PM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="BMASTPC40"
+  DTS:CreatorName="BRAKE_NT\Steve.Waibel"
+  DTS:DTSID="{C4798868-FF69-4AC6-A719-EEE307899B53}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="15.0.2000.157"
+  DTS:LocaleID="1033"
+  DTS:ObjectName="Package"
+  DTS:PackageType="5"
+  DTS:VersionBuild="5"
+  DTS:VersionGUID="{C5C8A306-07A5-4CFA-AE30-99304E8B98F2}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[brakesql.MAS_WHS]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{5CF72710-589F-4FBB-9459-4D8780C1977F}"
+      DTS:ObjectName="brakesql.MAS_WHS">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectionString="Data Source=brakesql;Initial Catalog=MAS_WHS;Provider=MSOLEDBSQL.1;Integrated Security=SSPI;Auto Translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[brakesql.Shopware]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{EF4AC831-5574-465B-9B3D-AA87123DAECC}"
+      DTS:ObjectName="brakesql.Shopware">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectionString="Data Source=brakesql;Initial Catalog=Shopware;Provider=MSOLEDBSQL.1;Integrated Security=SSPI;Auto Translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:Variables />
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\Get Inventory"
+      DTS:CreationName="Microsoft.Pipeline"
+      DTS:Description="Data Flow Task"
+      DTS:DTSID="{3E9DAB3C-2B39-4905-BAFD-5A7C6F7ECB85}"
+      DTS:ExecutableType="Microsoft.Pipeline"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Get Inventory"
+      DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <pipeline
+          version="1">
+          <components>
+            <component
+              refId="Package\Get Inventory\MAS_WHS"
+              componentClassID="Microsoft.OLEDBSource"
+              contactInfo="OLE DB Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;7"
+              description="OLE DB Source"
+              name="MAS_WHS"
+              usesDispositions="true"
+              version="7">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset"></property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">SELECT [ItemCode] as PartNum    
+      ,[ItemCodeDesc]
+     ,[UDF_POS_GROUP] as Location
+      ,cast(([StandardUnitCost]) as numeric(6,2) ) as StdCost  
+	   ,cast(([SuggestedRetailPrice])as numeric(6,2) ) as List
+      ,[UDF_MARKETS]
+    ,[UDF_MIN] as MIN
+      ,[UDF_MAX] as MAX
+ 
+  FROM [MAS_WHS].[dbo].[CI_Item]
+  where productType = 'F' and itemcode not like  '/%' and itemcode not like 'Z-%' and itemcode not like 'S-%'</property>
+                <property
+                  dataType="System.String"
+                  description="The variable that contains the SQL command to be executed."
+                  name="SqlCommandVariable"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">2</property>
+                <property
+                  dataType="System.String"
+                  description="The mappings between the parameters in the SQL command and variables."
+                  name="ParameterMapping"></property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Get Inventory\MAS_WHS.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[brakesql.MAS_WHS]"
+                  connectionManagerRefId="Package.ConnectionManagers[brakesql.MAS_WHS]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <outputs>
+                <output
+                  refId="Package\Get Inventory\MAS_WHS.Outputs[OLE DB Source Output]"
+                  name="OLE DB Source Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Get Inventory\MAS_WHS.Outputs[OLE DB Source Output].Columns[PartNum]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Get Inventory\MAS_WHS.Outputs[OLE DB Source Output].ExternalColumns[PartNum]"
+                      length="30"
+                      lineageId="Package\Get Inventory\MAS_WHS.Outputs[OLE DB Source Output].Columns[PartNum]"
+                      name="PartNum"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Get Inventory\MAS_WHS.Outputs[OLE DB Source Output].Columns[ItemCodeDesc]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Get Inventory\MAS_WHS.Outputs[OLE DB Source Output].ExternalColumns[ItemCodeDesc]"
+                      length="30"
+                      lineageId="Package\Get Inventory\MAS_WHS.Outputs[OLE DB Source Output].Columns[ItemCodeDesc]"
+                      name="ItemCodeDesc"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Get Inventory\MAS_WHS.Outputs[OLE DB Source Output].Columns[Location]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Get Inventory\MAS_WHS.Outputs[OLE DB Source Output].ExternalColumns[Location]"
+                      length="3"
+                      lineageId="Package\Get Inventory\MAS_WHS.Outputs[OLE DB Source Output].Columns[Location]"
+                      name="Location"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Get Inventory\MAS_WHS.Outputs[OLE DB Source Output].Columns[StdCost]"
+                      dataType="numeric"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Get Inventory\MAS_WHS.Outputs[OLE DB Source Output].ExternalColumns[StdCost]"
+                      lineageId="Package\Get Inventory\MAS_WHS.Outputs[OLE DB Source Output].Columns[StdCost]"
+                      name="StdCost"
+                      precision="15"
+                      scale="6"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Get Inventory\MAS_WHS.Outputs[OLE DB Source Output].Columns[List]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Get Inventory\MAS_WHS.Outputs[OLE DB Source Output].ExternalColumns[List]"
+                      length="7"
+                      lineageId="Package\Get Inventory\MAS_WHS.Outputs[OLE DB Source Output].Columns[List]"
+                      name="List"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Get Inventory\MAS_WHS.Outputs[OLE DB Source Output].Columns[UDF_MARKETS]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Get Inventory\MAS_WHS.Outputs[OLE DB Source Output].ExternalColumns[UDF_MARKETS]"
+                      length="9"
+                      lineageId="Package\Get Inventory\MAS_WHS.Outputs[OLE DB Source Output].Columns[UDF_MARKETS]"
+                      name="UDF_MARKETS"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Get Inventory\MAS_WHS.Outputs[OLE DB Source Output].Columns[MIN]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Get Inventory\MAS_WHS.Outputs[OLE DB Source Output].ExternalColumns[MIN]"
+                      length="2"
+                      lineageId="Package\Get Inventory\MAS_WHS.Outputs[OLE DB Source Output].Columns[MIN]"
+                      name="MIN"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Get Inventory\MAS_WHS.Outputs[OLE DB Source Output].Columns[MAX]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Get Inventory\MAS_WHS.Outputs[OLE DB Source Output].ExternalColumns[MAX]"
+                      length="2"
+                      lineageId="Package\Get Inventory\MAS_WHS.Outputs[OLE DB Source Output].Columns[MAX]"
+                      name="MAX"
+                      truncationRowDisposition="FailComponent" />
+                  </outputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Get Inventory\MAS_WHS.Outputs[OLE DB Source Output].ExternalColumns[PartNum]"
+                      codePage="1252"
+                      dataType="str"
+                      length="30"
+                      name="PartNum" />
+                    <externalMetadataColumn
+                      refId="Package\Get Inventory\MAS_WHS.Outputs[OLE DB Source Output].ExternalColumns[ItemCodeDesc]"
+                      codePage="1252"
+                      dataType="str"
+                      length="30"
+                      name="ItemCodeDesc" />
+                    <externalMetadataColumn
+                      refId="Package\Get Inventory\MAS_WHS.Outputs[OLE DB Source Output].ExternalColumns[Location]"
+                      codePage="1252"
+                      dataType="str"
+                      length="3"
+                      name="Location" />
+                    <externalMetadataColumn
+                      refId="Package\Get Inventory\MAS_WHS.Outputs[OLE DB Source Output].ExternalColumns[StdCost]"
+                      dataType="numeric"
+                      name="StdCost"
+                      precision="6"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Get Inventory\MAS_WHS.Outputs[OLE DB Source Output].ExternalColumns[List]"
+                      dataType="numeric"
+                      name="List"
+                      precision="6"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Get Inventory\MAS_WHS.Outputs[OLE DB Source Output].ExternalColumns[UDF_MARKETS]"
+                      codePage="1252"
+                      dataType="str"
+                      length="9"
+                      name="UDF_MARKETS" />
+                    <externalMetadataColumn
+                      refId="Package\Get Inventory\MAS_WHS.Outputs[OLE DB Source Output].ExternalColumns[MIN]"
+                      codePage="1252"
+                      dataType="str"
+                      length="2"
+                      name="MIN" />
+                    <externalMetadataColumn
+                      refId="Package\Get Inventory\MAS_WHS.Outputs[OLE DB Source Output].ExternalColumns[MAX]"
+                      codePage="1252"
+                      dataType="str"
+                      length="2"
+                      name="MAX" />
+                  </externalMetadataColumns>
+                </output>
+                <output
+                  refId="Package\Get Inventory\MAS_WHS.Outputs[OLE DB Source Error Output]"
+                  isErrorOut="true"
+                  name="OLE DB Source Error Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Get Inventory\MAS_WHS.Outputs[OLE DB Source Error Output].Columns[PartNum]"
+                      codePage="1252"
+                      dataType="str"
+                      length="30"
+                      lineageId="Package\Get Inventory\MAS_WHS.Outputs[OLE DB Source Error Output].Columns[PartNum]"
+                      name="PartNum" />
+                    <outputColumn
+                      refId="Package\Get Inventory\MAS_WHS.Outputs[OLE DB Source Error Output].Columns[ItemCodeDesc]"
+                      codePage="1252"
+                      dataType="str"
+                      length="30"
+                      lineageId="Package\Get Inventory\MAS_WHS.Outputs[OLE DB Source Error Output].Columns[ItemCodeDesc]"
+                      name="ItemCodeDesc" />
+                    <outputColumn
+                      refId="Package\Get Inventory\MAS_WHS.Outputs[OLE DB Source Error Output].Columns[Location]"
+                      codePage="1252"
+                      dataType="str"
+                      length="3"
+                      lineageId="Package\Get Inventory\MAS_WHS.Outputs[OLE DB Source Error Output].Columns[Location]"
+                      name="Location" />
+                    <outputColumn
+                      refId="Package\Get Inventory\MAS_WHS.Outputs[OLE DB Source Error Output].Columns[StdCost]"
+                      dataType="numeric"
+                      lineageId="Package\Get Inventory\MAS_WHS.Outputs[OLE DB Source Error Output].Columns[StdCost]"
+                      name="StdCost"
+                      precision="6"
+                      scale="2" />
+                    <outputColumn
+                      refId="Package\Get Inventory\MAS_WHS.Outputs[OLE DB Source Error Output].Columns[List]"
+                      dataType="numeric"
+                      lineageId="Package\Get Inventory\MAS_WHS.Outputs[OLE DB Source Error Output].Columns[List]"
+                      name="List"
+                      precision="6"
+                      scale="2" />
+                    <outputColumn
+                      refId="Package\Get Inventory\MAS_WHS.Outputs[OLE DB Source Error Output].Columns[UDF_MARKETS]"
+                      codePage="1252"
+                      dataType="str"
+                      length="9"
+                      lineageId="Package\Get Inventory\MAS_WHS.Outputs[OLE DB Source Error Output].Columns[UDF_MARKETS]"
+                      name="UDF_MARKETS" />
+                    <outputColumn
+                      refId="Package\Get Inventory\MAS_WHS.Outputs[OLE DB Source Error Output].Columns[MIN]"
+                      codePage="1252"
+                      dataType="str"
+                      length="2"
+                      lineageId="Package\Get Inventory\MAS_WHS.Outputs[OLE DB Source Error Output].Columns[MIN]"
+                      name="MIN" />
+                    <outputColumn
+                      refId="Package\Get Inventory\MAS_WHS.Outputs[OLE DB Source Error Output].Columns[MAX]"
+                      codePage="1252"
+                      dataType="str"
+                      length="2"
+                      lineageId="Package\Get Inventory\MAS_WHS.Outputs[OLE DB Source Error Output].Columns[MAX]"
+                      name="MAX" />
+                    <outputColumn
+                      refId="Package\Get Inventory\MAS_WHS.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Get Inventory\MAS_WHS.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Get Inventory\MAS_WHS.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Get Inventory\MAS_WHS.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Get Inventory\Shopware"
+              componentClassID="Microsoft.OLEDBDestination"
+              contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
+              description="OLE DB Destination"
+              name="Shopware"
+              usesDispositions="true"
+              version="4">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">[dbo].[Inventory_Master]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">3</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepIdentity">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the columns containing null will have null inserted in the destination. If false, columns containing null will have their default values inserted at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepNulls">false</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies options to be used with fast load.  Applies only if fast load is turned on."
+                  name="FastLoadOptions">TABLOCK,CHECK_CONSTRAINTS</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion.  Applies only if fast load is turned on."
+                  name="FastLoadMaxInsertCommitSize">2147483647</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Get Inventory\Shopware.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[brakesql.Shopware]"
+                  connectionManagerRefId="Package.ConnectionManagers[brakesql.Shopware]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Get Inventory\Shopware.Inputs[OLE DB Destination Input]"
+                  errorOrTruncationOperation="Insert"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="OLE DB Destination Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Get Inventory\Shopware.Inputs[OLE DB Destination Input].Columns[PartNum]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="30"
+                      cachedName="PartNum"
+                      externalMetadataColumnId="Package\Get Inventory\Shopware.Inputs[OLE DB Destination Input].ExternalColumns[PartNum]"
+                      lineageId="Package\Get Inventory\MAS_WHS.Outputs[OLE DB Source Output].Columns[PartNum]" />
+                    <inputColumn
+                      refId="Package\Get Inventory\Shopware.Inputs[OLE DB Destination Input].Columns[ItemCodeDesc]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="30"
+                      cachedName="ItemCodeDesc"
+                      externalMetadataColumnId="Package\Get Inventory\Shopware.Inputs[OLE DB Destination Input].ExternalColumns[ItemCodeDesc]"
+                      lineageId="Package\Get Inventory\MAS_WHS.Outputs[OLE DB Source Output].Columns[ItemCodeDesc]" />
+                    <inputColumn
+                      refId="Package\Get Inventory\Shopware.Inputs[OLE DB Destination Input].Columns[Location]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="3"
+                      cachedName="Location"
+                      externalMetadataColumnId="Package\Get Inventory\Shopware.Inputs[OLE DB Destination Input].ExternalColumns[Location]"
+                      lineageId="Package\Get Inventory\MAS_WHS.Outputs[OLE DB Source Output].Columns[Location]" />
+                    <inputColumn
+                      refId="Package\Get Inventory\Shopware.Inputs[OLE DB Destination Input].Columns[StdCost]"
+                      cachedDataType="numeric"
+                      cachedName="StdCost"
+                      cachedPrecision="15"
+                      cachedScale="6"
+                      externalMetadataColumnId="Package\Get Inventory\Shopware.Inputs[OLE DB Destination Input].ExternalColumns[StdCost]"
+                      lineageId="Package\Get Inventory\MAS_WHS.Outputs[OLE DB Source Output].Columns[StdCost]" />
+                    <inputColumn
+                      refId="Package\Get Inventory\Shopware.Inputs[OLE DB Destination Input].Columns[List]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="7"
+                      cachedName="List"
+                      externalMetadataColumnId="Package\Get Inventory\Shopware.Inputs[OLE DB Destination Input].ExternalColumns[List]"
+                      lineageId="Package\Get Inventory\MAS_WHS.Outputs[OLE DB Source Output].Columns[List]" />
+                    <inputColumn
+                      refId="Package\Get Inventory\Shopware.Inputs[OLE DB Destination Input].Columns[UDF_MARKETS]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="9"
+                      cachedName="UDF_MARKETS"
+                      externalMetadataColumnId="Package\Get Inventory\Shopware.Inputs[OLE DB Destination Input].ExternalColumns[UDF_MARKETS]"
+                      lineageId="Package\Get Inventory\MAS_WHS.Outputs[OLE DB Source Output].Columns[UDF_MARKETS]" />
+                    <inputColumn
+                      refId="Package\Get Inventory\Shopware.Inputs[OLE DB Destination Input].Columns[MIN]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="2"
+                      cachedName="MIN"
+                      externalMetadataColumnId="Package\Get Inventory\Shopware.Inputs[OLE DB Destination Input].ExternalColumns[MIN]"
+                      lineageId="Package\Get Inventory\MAS_WHS.Outputs[OLE DB Source Output].Columns[MIN]" />
+                    <inputColumn
+                      refId="Package\Get Inventory\Shopware.Inputs[OLE DB Destination Input].Columns[MAX]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="2"
+                      cachedName="MAX"
+                      externalMetadataColumnId="Package\Get Inventory\Shopware.Inputs[OLE DB Destination Input].ExternalColumns[MAX]"
+                      lineageId="Package\Get Inventory\MAS_WHS.Outputs[OLE DB Source Output].Columns[MAX]" />
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Get Inventory\Shopware.Inputs[OLE DB Destination Input].ExternalColumns[PartNum]"
+                      codePage="1252"
+                      dataType="str"
+                      length="30"
+                      name="PartNum" />
+                    <externalMetadataColumn
+                      refId="Package\Get Inventory\Shopware.Inputs[OLE DB Destination Input].ExternalColumns[ItemCodeDesc]"
+                      codePage="1252"
+                      dataType="str"
+                      length="30"
+                      name="ItemCodeDesc" />
+                    <externalMetadataColumn
+                      refId="Package\Get Inventory\Shopware.Inputs[OLE DB Destination Input].ExternalColumns[Location]"
+                      codePage="1252"
+                      dataType="str"
+                      length="3"
+                      name="Location" />
+                    <externalMetadataColumn
+                      refId="Package\Get Inventory\Shopware.Inputs[OLE DB Destination Input].ExternalColumns[StdCost]"
+                      dataType="numeric"
+                      name="StdCost"
+                      precision="6"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Get Inventory\Shopware.Inputs[OLE DB Destination Input].ExternalColumns[List]"
+                      dataType="numeric"
+                      name="List"
+                      precision="6"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Get Inventory\Shopware.Inputs[OLE DB Destination Input].ExternalColumns[UDF_MARKETS]"
+                      codePage="1252"
+                      dataType="str"
+                      length="9"
+                      name="UDF_MARKETS" />
+                    <externalMetadataColumn
+                      refId="Package\Get Inventory\Shopware.Inputs[OLE DB Destination Input].ExternalColumns[MIN]"
+                      codePage="1252"
+                      dataType="str"
+                      length="2"
+                      name="MIN" />
+                    <externalMetadataColumn
+                      refId="Package\Get Inventory\Shopware.Inputs[OLE DB Destination Input].ExternalColumns[MAX]"
+                      codePage="1252"
+                      dataType="str"
+                      length="2"
+                      name="MAX" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Get Inventory\Shopware.Outputs[OLE DB Destination Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="OLE DB Destination Error Output"
+                  synchronousInputId="Package\Get Inventory\Shopware.Inputs[OLE DB Destination Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Get Inventory\Shopware.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Get Inventory\Shopware.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Get Inventory\Shopware.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Get Inventory\Shopware.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path
+              refId="Package\Get Inventory.Paths[OLE DB Source Output]"
+              endId="Package\Get Inventory\Shopware.Inputs[OLE DB Destination Input]"
+              name="OLE DB Source Output"
+              startId="Package\Get Inventory\MAS_WHS.Outputs[OLE DB Source Output]" />
+          </paths>
+        </pipeline>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Truncate Inventory Master"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{9E189999-E55D-46C2-B220-8E9145446396}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Truncate Inventory Master"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{EF4AC831-5574-465B-9B3D-AA87123DAECC}"
+          SQLTask:BypassPrepare="False"
+          SQLTask:SqlStatementSource="Truncate table Inventory_Master" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:PrecedenceConstraints>
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint]"
+      DTS:CreationName=""
+      DTS:DTSID="{93928034-3E60-4C5F-9131-3144CF57629C}"
+      DTS:From="Package\Truncate Inventory Master"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint"
+      DTS:To="Package\Get Inventory" />
+  </DTS:PrecedenceConstraints>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="145,42"
+          Id="Package\Get Inventory"
+          TopLeft="146,133" />
+        <NodeLayout
+          Size="207,42"
+          Id="Package\Truncate Inventory Master"
+          TopLeft="101,52" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint]"
+          TopLeft="204.5,94">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="14,39"
+              Start="0,0"
+              End="14,31.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,15.5" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,15.5"
+                    Point2="0,19.5"
+                    Point3="4,19.5" />
+                  <mssgle:LineSegment
+                    End="10,19.5" />
+                  <mssgle:CubicBezierSegment
+                    Point1="10,19.5"
+                    Point2="14,19.5"
+                    Point3="14,23.5" />
+                  <mssgle:LineSegment
+                    End="14,31.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+  <TaskHost
+    design-time-name="Package\Get Inventory">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="135,42"
+          Id="Package\Get Inventory\MAS_WHS"
+          TopLeft="106,46" />
+        <NodeLayout
+          Size="129,42"
+          Id="Package\Get Inventory\Shopware"
+          TopLeft="127,163" />
+        <EdgeLayout
+          Id="Package\Get Inventory.Paths[OLE DB Source Output]"
+          TopLeft="173.5,88">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="18,75"
+              Start="0,0"
+              End="18,67.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,33.5" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,33.5"
+                    Point2="0,37.5"
+                    Point3="4,37.5" />
+                  <mssgle:LineSegment
+                    End="14,37.5" />
+                  <mssgle:CubicBezierSegment
+                    Point1="14,37.5"
+                    Point2="18,37.5"
+                    Point3="18,41.5" />
+                  <mssgle:LineSegment
+                    End="18,67.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Get Inventory\MAS_WHS">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\Get Inventory\Shopware">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>
